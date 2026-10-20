@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mentoria ESL · Henrique Ventura</title>
+<meta name="description" content="ESL – Empresa de Serviço Lucrativa. Programa de 12 meses em que Henrique Ventura monta, com você e com o seu time, o processo de vendas e a liderança que fazem uma empresa de serviços crescer sem depender do dono.">
+<meta property="og:title" content="Mentoria ESL · Empresa de Serviço Lucrativa">
+<meta property="og:description" content="Processo de vendas e liderança de time para empresários de serviços e treinamentos. Por Henrique Ventura.">
+<link rel="stylesheet" href="assets/esl.css">
+<style>
+  /* Específico desta página */
+  .hero { min-height: 92vh; display: grid; align-items: center; padding-block: clamp(5rem, 10vw, 8rem) clamp(3rem, 6vw, 5rem); }
+  .hero-grid { display: grid; gap: var(--s-7); grid-template-columns: 1fr; }
+  @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.25fr 0.9fr; align-items: center; } }
+  .hero h1 { max-width: 18ch; }
+  .hero .lead { font-size: 1.1rem; }
+  .hero .facts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4) var(--s-6); margin-top: var(--s-6); padding-top: var(--s-5); border-top: 1px solid var(--line); }
+  @media (min-width: 600px) { .hero .facts { grid-template-columns: repeat(4, auto); justify-content: start; } }
+  .fact .k { font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--track-mid); text-transform: uppercase; color: var(--mist-2); }
+  .fact .v { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; color: var(--champagne); }
+  .hero .photo-slot { max-width: 440px; margin-inline: auto; }
+
+  nav.top { position: absolute; top: 0; left: 0; right: 0; z-index: 20; padding: var(--s-5) 0; }
+  nav.top .container { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
+  nav.top .links { display: none; gap: var(--s-5); font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--track-mid); text-transform: uppercase; }
+  nav.top .links a { text-decoration: none; color: var(--mist); }
+  nav.top .links a:hover { color: var(--gold-400); }
+  @media (min-width: 820px) { nav.top .links { display: flex; } }
+
+  .premise { font-family: var(--font-display); font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem); line-height: 1.22; font-weight: 500; }
+  .premise + .premise { margin-top: var(--s-5); }
+  .premise strong { font-weight: 600; color: var(--gold-400); }
+  .on-paper .premise strong { color: var(--gold-600); }
+
+  .numbers { display: grid; gap: var(--s-6); grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 820px) { .numbers { grid-template-columns: repeat(4, 1fr); } }
+
+  .method { display: grid; gap: var(--s-5); grid-template-columns: 1fr; }
+  @media (min-width: 820px) { .method { grid-template-columns: repeat(3, 1fr); } }
+  .method .letter { font-family: var(--font-display); font-size: 6rem; line-height: 0.8; font-weight: 500; color: var(--gold-400); letter-spacing: -0.02em; font-variation-settings: "opsz" 96; }
+  .method .card { padding: var(--s-6) var(--s-5) var(--s-5) 0; border: 0; border-top: 1px solid var(--hair-gold); }
+  @media (min-width: 820px) { .method { gap: 0; } .method .card + .card { border-left: 1px solid var(--hair); padding-left: var(--s-5); } }
+  .method .when { font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--track-mid); text-transform: uppercase; color: var(--mist-2); margin-top: var(--s-3); }
+
+  .price-arg { display: grid; gap: var(--s-5); grid-template-columns: 1fr; align-items: center; }
+  @media (min-width: 820px) { .price-arg { grid-template-columns: 1fr 1fr; } }
+  .big-compare { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s-4); text-align: center; }
+  .big-compare .n { font-family: var(--font-display); font-size: clamp(1.8rem, 1.2rem + 2vw, 3rem); font-weight: 600; line-height: 1; color: var(--champagne); }
+  .big-compare .l { font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--track-mid); text-transform: uppercase; color: var(--mist-2); margin-top: var(--s-2); }
+  .big-compare .vs { font-family: var(--font-display); font-style: italic; color: var(--gold-400); font-size: 1.4rem; }
+
+  footer { padding: var(--s-8) 0 var(--s-9); border-top: 1px solid var(--line); }
+  footer .container { display: grid; gap: var(--s-5); }
+  @media (min-width: 820px) { footer .container { grid-template-columns: auto 1fr auto; align-items: center; } }
+  footer .legal { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--mist-2); max-width: 60ch; }
+
+  /* Seção "pessoas" — frase em destaque */
+  .statement { text-align: center; }
+  .statement .giant { color: var(--champagne); }
+  .statement .giant em { color: var(--gold-400); font-style: italic; font-weight: 500; }
+</style>
+</head>
+<body class="grain">
+
+<nav class="top">
+  <div class="container">
+    <a class="brand sm" href="#"><span class="word">ESL</span><span class="sub">Empresa de Serviço Lucrativa</span></a>
+    <div class="links">
+      <a href="#historia">História</a>
+      <a href="#metodo">Método</a>
+      <a href="#programa">Programa</a>
+      <a href="#faq">Dúvidas</a>
+      <a href="#diagnostico" class="gold">Diagnóstico →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero glow">
+  <div class="container hero-grid">
+    <div class="stack">
+      <span class="eyebrow reveal">Programa de mentoria · 12 meses · Henrique Ventura</span>
+      <h1 class="reveal" data-delay="1">Empresa de serviço boa de entrega e ruim de venda é a regra no Brasil. <em class="gold">A exceção tem processo.</em></h1>
+      <p class="lead reveal" data-delay="2">A ESL é um programa de um ano em que eu monto, junto com você e com o seu time, o processo de vendas e a liderança que fazem uma empresa de serviços ou treinamentos crescer sem o dono atender cada cliente. É o que eu fiz em três mercados diferentes. E é a única maneira que eu conheço de fazer isso em menos de doze meses.</p>
+      <div class="flex reveal" data-delay="3">
+        <a class="btn btn-lg" href="#diagnostico">Começar pelo diagnóstico <span class="arrow">→</span></a>
+        <a class="btn btn-ghost btn-lg" href="#historia">Ler a história primeiro</a>
+      </div>
+      <div class="facts reveal" data-delay="4">
+        <div class="fact"><div class="k">Duração</div><div class="v">12 meses</div></div>
+        <div class="fact"><div class="k">Formato</div><div class="v">Grupo + individual</div></div>
+        <div class="fact"><div class="k">Para</div><div class="v">Serviços e treinamentos</div></div>
+        <div class="fact"><div class="k">Começa com</div><div class="v">Um diagnóstico</div></div>
+      </div>
+    </div>
+    <div class="reveal" data-delay="2">
+      <!-- Troque por <img src="assets/img/henrique-hero.jpg" alt="Henrique Ventura"> quando a foto chegar -->
+      <div class="photo-slot framed">
+        <span class="mark">HV</span>
+        <span class="cap">Henrique Ventura · @venturahenrique</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>Onde passa um boi, passa uma boiada</span><span>Vendas sempre foram sobre pessoas</span><span>Não nasci vendedor. Nasci tímido.</span><span>Processo é o que sobra quando o dono sai da sala</span>
+    <span>Onde passa um boi, passa uma boiada</span><span>Vendas sempre foram sobre pessoas</span><span>Não nasci vendedor. Nasci tímido.</span><span>Processo é o que sobra quando o dono sai da sala</span>
+  </div>
+</div>
+
+<!-- ============================ PREMISSAS ============================ -->
+<section class="section on-paper">
+  <div class="container">
+    <div class="grid-2 offset">
+      <div class="stack">
+        <span class="eyebrow reveal">Três coisas que eu vi de perto</span>
+        <p class="premise reveal" data-delay="1">Quatro lojas que vendiam <strong>R$ 8 milhões por ano</strong> sem um CRM. Era na carteira, na mão e no WhatsApp.</p>
+        <p class="premise reveal" data-delay="2">Nessas quatro lojas, o dono e um diretor faziam <strong>quase metade das vendas</strong>. Os gestores não sabiam dizer quantos clientes tinham.</p>
+        <p class="premise reveal" data-delay="3">E nenhum deles era preguiçoso ou burro. Eram vendedores bons, com 15 anos de carteira, sentados numa cadeira de gestor <strong>sem nunca ter aprendido a gerir</strong>.</p>
+      </div>
+      <div class="stack reveal" data-delay="2">
+        <p class="lead">Eu rodei essas lojas em 2024, mapeando o que dava para virar franquia. Perguntava para o gestor: "quantos clientes compraram no último trimestre?". Ele abria o sistema, olhava para mim, olhava para a tela, e dizia que ia conferir. Nunca conferia.</p>
+        <p>O problema nunca foi vontade. Foi que ninguém tinha montado o processo. E processo não se compra pronto: se monta dentro da empresa, com as pessoas que já estão lá.</p>
+        <p>É isso que esta página explica. Se no fim fizer sentido, tem um formulário. Se não fizer, você sai daqui com três ou quatro ideias para aplicar na segunda-feira, e a gente fica quite.</p>
+        <div class="lesson"><b>Antes de continuar</b>Eu não vou prometer faturamento. Vou mostrar o que fiz, o que vi, e o que é o programa. A conclusão é sua.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ HISTÓRIA ============================ -->
+<section class="section" id="historia">
+  <div class="container">
+    <div class="stack" style="margin-bottom: var(--s-7)">
+      <div class="sec-num reveal"><b>01</b> Minha história, em oito capítulos</div>
+      <h2 class="reveal" data-delay="1">De atendente de call center a <em class="gold">30 mil pessoas lideradas.</em><br class="hide-mobile"> Com um golpe de R$ 12 mil no meio.</h2>
+    </div>
+
+    <article class="chapter reveal">
+      <div class="num">01</div>
+      <div class="stack">
+        <h3>Eu não nasci vendedor. Nasci tímido.</h3>
+        <div class="body">
+          <p class="dropcap">Zona Leste de São Paulo, numa rua que o pessoal chamava de Rua da Fumaça. Escola pública. Na adolescência eu era o tipo de pessoa que ensaiava a frase antes de pedir o lanche no balcão.</p>
+          <p>Aos 16 comecei a namorar a Suelen. Esse detalhe parece fora de lugar numa página de negócios. Guarda ele, que ele volta.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter reveal">
+      <div class="num">02</div>
+      <div class="stack">
+        <h3>Garçom, depois telefone.</h3>
+        <div class="body">
+          <p>Primeiro trabalho: garçom, em freelas, bem novo. Primeiro emprego de carteira assinada: atendente de call center no Bradesco. Fiquei menos de dois anos.</p>
+          <p>Um dia fiz a conta. Para virar gerente geral, uns dez anos. Para superintendente, mais um tanto. Eu queria um resultado um pouco mais rápido, e naquela época "resultado" era ganhar dez mil reais por mês.</p>
+          <div class="lesson"><b>O que ficou</b>A conta do tempo. Eu faço essa conta até hoje, com todo empresário que sento para conversar.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter reveal">
+      <div class="num">03</div>
+      <div class="stack">
+        <h3>Fim de 2013: Zona Leste até Osasco, faculdade à noite, e R$ 12 mil que sumiram.</h3>
+        <div class="body">
+          <p>Entrei no marketing de relacionamento. Todo dia atravessava a cidade, e à noite fazia Administração. No mesmo ano coloquei R$ 12 mil num esquema que prometia retorno rápido. O dinheiro foi embora em semanas.</p>
+          <p>Mas então aconteceu a parte que ninguém conta nos posts motivacionais: eu continuei. Entrei numa empresa pequena, com 33 produtos no catálogo, e em dois anos tinha milhares de pessoas no time.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter reveal">
+      <div class="num">04</div>
+      <div class="stack">
+        <h3>Eu aprendia com Ctrl-C, Ctrl-V.</h3>
+        <div class="body">
+          <p>Se o meu líder contava uma piada na apresentação e a sala ria, eu contava a mesma piada na minha. Nem sempre riam. Mas eu copiava igual, e só depois ia entender por que funcionava.</p>
+          <p>Foi aí que entendi uma coisa que carrego até hoje: a maioria das pessoas não aprende observando. Precisa de método, de script, de passo a passo. Então a gente escreveu tudo. Script para contato frio, morno e quente. Dez passos de entrada para cada pessoa nova. Rodada de ligação. Pílula de treino diária.</p>
+          <div class="lesson"><b>O que ficou</b>Vendas não é dom. É um processo que dá para ensinar a quem nunca vendeu. Eu sou a prova, e depois de mim vieram outras milhares.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter reveal">
+      <div class="num">05</div>
+      <div class="stack">
+        <h3>Nove anos, cinco países, e um seminário de quatro horas em espanhol.</h3>
+        <div class="body">
+          <p>O negócio cresceu para fora do Brasil. Equador, México, Peru, República Dominicana. Numa dessas, me pediram para conduzir um seminário de quatro horas. Em espanhol. Eu não falava espanhol.</p>
+          <p>Falei um portunhol vergonhoso por quatro horas, e a sala ficou até o fim. Em outro evento, falei para 20 mil pessoas. O menino que ensaiava o pedido do lanche não existia mais, e eu não tinha percebido em que dia ele foi embora.</p>
+          <p>Em seis anos, meu ganho acumulado numa única companhia passou de R$ 3 milhões. Mais de 30 mil pessoas passaram pelo time. E eu criei, com minha esposa, um programa só para as mulheres do negócio, porque a maioria dos casais que crescia, crescia junto.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter reveal">
+      <div class="num">06</div>
+      <div class="stack">
+        <h3>Então eu troquei tudo por um mercado de que não entendia nada.</h3>
+        <div class="body">
+          <p>Um amigo tinha uma empresa de construção a seco, steel frame, e queria transformar em franquia. Eu nunca tinha visto uma obra por dentro. Aceitei.</p>
+          <p>Em dois anos e meio: 30 contratos de franquia assinados, 22 lojas abertas, um braço educacional criado do zero com cerca de mil alunos, e duas turmas de empresários levadas para dez dias de imersão nos Estados Unidos. Vendi franquia de R$ 300 mil, produto em balcão, aula de R$ 97, imersão de R$ 2 mil e curso de US$ 3 mil. Tudo com o mesmo processo, trocando só o script.</p>
+          <div class="lesson"><b>O que ficou</b>Processo de vendas não tem nicho. Pessoas é que têm. Onde passa um boi, passa uma boiada.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter reveal">
+      <div class="num">07</div>
+      <div class="stack">
+        <h3>O que eu vi dentro dessas empresas é o motivo desta página.</h3>
+        <div class="body">
+          <p>Lojas de R$ 8 milhões sem CRM. Gestores que eram ótimos vendedores e péssimos gestores. O dono respondendo cliente à meia-noite e chamando isso de dedicação. A agência de marketing dizendo que o problema era o comercial, e o comercial dizendo que era a agência.</p>
+          <p>Perguntei a um CEO o que a empresa seria em cinco anos. Depois perguntei a cada diretor. Eram respostas de cinco empresas diferentes.</p>
+          <p>Nada disso é falta de inteligência. É falta de alguém que já montou o processo em outro lugar, sentar do lado, e montar de novo.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="chapter reveal">
+      <div class="num">08</div>
+      <div class="stack">
+        <h3>A ESL é isso aqui, organizado.</h3>
+        <div class="body">
+          <p>Peguei tudo o que escrevi em nove anos de marketing de relacionamento, tudo o que implantei em dois anos e meio de franquia, e tirei o que só funcionava no meu mercado. Sobrou o que funciona em qualquer empresa que vende serviço: a esteira de produtos, o sistema de vendas e a liderança do time.</p>
+          <p>Hoje eu tenho 33 anos, 17 de relacionamento com a mesma mulher (eu avisei que ela voltava), um filho de dois anos e meio que eu levo na escola, e uma empresa que me ensinou que dá para crescer sem ser o gargalo. Não é uma teoria. É a minha agenda.</p>
+          <div class="photo-slot wide natural" style="max-width: 560px; margin-top: var(--s-5)"><img src="assets/img/henrique-casal-paris.jpg" alt="Henrique e Suelen em Paris"></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============================ NÚMEROS ============================ -->
+<section class="section-tight on-navy-950">
+  <div class="container">
+    <div class="numbers">
+      <div class="stat reveal"><div class="n">30 mil</div><div class="l">pessoas lideradas</div></div>
+      <div class="stat reveal" data-delay="1"><div class="n">5 países</div><div class="l">treinando times</div></div>
+      <div class="stat reveal" data-delay="2"><div class="n">22 lojas</div><div class="l">abertas em 2,5 anos</div></div>
+      <div class="stat reveal" data-delay="3"><div class="n">R$ 97 a 300 mil</div><div class="l">de ticket vendido com o mesmo processo</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ESPELHO ============================ -->
+<section class="section on-paper" id="espelho">
+  <div class="container">
+    <div class="grid-2">
+      <div class="stack">
+        <span class="eyebrow reveal">Frases que eu ouço toda semana</span>
+        <h2 class="reveal" data-delay="1">Se você já disse uma dessas em voz alta, a gente provavelmente deveria conversar.</h2>
+        <p class="lead reveal" data-delay="2">Não são frases de empresário fraco. São frases de empresário bom demais na entrega para ter sobrado tempo de montar a venda.</p>
+      </div>
+      <div class="mirror">
+        <div class="m reveal">Não tem gente boa no mercado.</div>
+        <div class="m reveal" data-delay="1">Se eu passar meus clientes grandes para o time, eles levam embora.</div>
+        <div class="m reveal" data-delay="2">Eu respondo cliente às onze da noite. Isso é dedicação.</div>
+        <div class="m reveal" data-delay="3">A agência diz que o problema é o comercial. O comercial diz que é a agência.</div>
+        <div class="m reveal" data-delay="4">Eu sei que preciso de processo. Só não sei quem monta sem parar a empresa.</div>
+        <div class="m reveal" data-delay="4">Crescer, para mim, virou sinônimo de mais problema.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FRASE ============================ -->
+<section class="section statement glow">
+  <div class="container">
+    <p class="giant reveal">Vendas sempre foram<br>sobre <em>pessoas.</em></p>
+    <p class="lead reveal" data-delay="1" style="margin: var(--s-6) auto 0">O CRM, o script e o indicador existem para que a pessoa certa fale com o cliente certo na hora certa. Quem começa pela ferramenta compra um CRM e continua vendendo na carteira. Quem começa pela pessoa monta o processo e depois escolhe a ferramenta.</p>
+  </div>
+</section>
+
+<!-- ============================ MÉTODO ============================ -->
+<section class="section on-navy-800" id="metodo">
+  <div class="container stack-lg">
+    <div class="stack">
+      <div class="sec-num reveal"><b>02</b> O método</div>
+      <h2 class="reveal" data-delay="1">ESL são três letras. Cada uma é uma pergunta que a sua empresa precisa responder.</h2>
+      <p class="lead reveal" data-delay="2">A ordem importa. A maioria tenta começar pelo time, que é a parte mais difícil, antes de arrumar o que vende e como vende.</p>
+    </div>
+    <div class="method">
+      <div class="card reveal">
+        <div class="letter">E</div>
+        <div class="card-title">Esteira: <em class="gold">o que</em> você vende</div>
+        <p>Reorganizo com você a oferta. O médico que vende consulta passa a vender um protocolo de resultado, com três níveis de preço. O advogado que cobra hora passa a cobrar o problema resolvido. Produto certo vende com metade do esforço.</p>
+        <div class="when">Meses 1 a 2 · Esteira de produtos · Indicadores · Protocolo high ticket</div>
+      </div>
+      <div class="card reveal" data-delay="1">
+        <div class="letter">S</div>
+        <div class="card-title">Sistema de vendas: <em class="gold">como</em> você vende</div>
+        <p>Scripts de prospecção quente, fria e de indicação. Plano de atendimento de alta conversão desde a primeira mensagem. Script da reunião 1 a 1. Tudo escrito, testado com você e entregue ao time para rodar sem o dono na sala.</p>
+        <div class="when">Meses 2 a 6 · Prospecção · Atendimento · Reunião 1x1 · Indicação</div>
+      </div>
+      <div class="card reveal" data-delay="2">
+        <div class="letter">L</div>
+        <div class="card-title">Liderança: <em class="gold">quem</em> vende quando você não está</div>
+        <p>Tutoria mensal com o seu time de vendas durante o ano inteiro. Rituais de kick-off, feedback e indicador. Identificar as "engrenagens": as duas ou três pessoas que, quando compram a visão, puxam o resto.</p>
+        <div class="when">Meses 4 a 12 · Tutoria com o time · Rituais · Hot seats quinzenais</div>
+      </div>
+    </div>
+    <div class="compare">
+      <div class="col bad reveal">
+        <h4>Como a maioria tenta</h4>
+        <ul>
+          <li>Contrata um gerente comercial de R$ 12 mil e espera que ele "traga processo"</li>
+          <li>Compra um CRM e o time continua vendendo no WhatsApp pessoal</li>
+          <li>Faz uma imersão de 3 dias, volta cheio de slide, e a segunda-feira engole tudo</li>
+          <li>O dono continua sendo quem fecha os clientes grandes</li>
+          <li>Prospecção é "quando sobra tempo"</li>
+        </ul>
+      </div>
+      <div class="col good reveal" data-delay="1">
+        <h4>Como funciona na ESL</h4>
+        <ul>
+          <li>O processo é montado dentro da sua empresa, com as pessoas que já estão lá</li>
+          <li>Ferramenta entra depois do processo, não antes</li>
+          <li>12 meses de acompanhamento, com hot seat a cada 15 dias e tutoria mensal com o time</li>
+          <li>O dono vira o dono do processo, não do telefone</li>
+          <li>Prospecção vira rotina com meta diária e script</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PROVA / HONESTIDADE ============================ -->
+<section class="section on-paper">
+  <div class="container grid-2">
+    <div class="stack">
+      <span class="eyebrow reveal">Sobre provas</span>
+      <h2 class="reveal" data-delay="1">Eu ainda não tenho um depoimento de mentorado da ESL. Vou explicar por quê.</h2>
+      <p class="lead reveal" data-delay="2">O programa é novo. O nome foi escrito há poucas semanas, e eu mesmo disse na época que estava "escrito na areia". Prefiro te contar isso do que inventar um print.</p>
+    </div>
+    <div class="stack reveal" data-delay="2">
+      <p>O que eu tenho são resultados de times que eu liderei e de empresas onde eu implantei o processo. São esses:</p>
+      <div class="deliverable has-v"><div class="idx">01</div><div><div class="t">Mais de 30 mil pessoas lideradas em nove anos</div><div class="d">Marketing de relacionamento, no Brasil e em cinco países da América Latina. Graduação máxima da companhia.</div></div><div class="v">2013–2022</div></div>
+      <div class="deliverable has-v"><div class="idx">02</div><div><div class="t">30 contratos de franquia e 22 lojas abertas</div><div class="d">Como diretor de expansão de uma franqueadora de construção a seco, num mercado que eu não conhecia ao entrar.</div></div><div class="v">2023–2025</div></div>
+      <div class="deliverable has-v"><div class="idx">03</div><div><div class="t">Um braço educacional criado do zero, com cerca de mil alunos</div><div class="d">Low ticket de R$ 97, imersão de R$ 2 mil e curso de US$ 3 mil nos EUA, com duas turmas levadas a Orlando.</div></div><div class="v">2023–2025</div></div>
+      <div class="deliverable has-v"><div class="idx">04</div><div><div class="t">Um casamento de 17 anos e um filho que eu levo na escola</div><div class="d">Não é número de negócio. Mas é a prova de que a agenda que eu ensino, eu uso.</div></div><div class="v">desde 2009</div></div>
+      <!-- Quando os depoimentos em vídeo de ex-liderados chegarem, entram aqui como <figure class="quote"> -->
+      <div class="lesson"><b>Combinado</b>Assim que os primeiros mentorados tiverem resultado, os nomes e os números entram nesta seção. Até lá, o que está aqui é o que existe.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PROGRAMA ============================ -->
+<section class="section" id="programa">
+  <div class="container stack-lg">
+    <div class="stack">
+      <div class="sec-num reveal"><b>03</b> Momento jabá, declarado</div>
+      <h2 class="reveal" data-delay="1">O que chega, exatamente, em cada um dos três níveis.</h2>
+      <p class="lead reveal" data-delay="2">A diferença entre eles é quanto de mim entra na sua empresa. O processo é o mesmo nos três.</p>
+    </div>
+
+    <div class="plans">
+      <div class="plan reveal">
+        <div class="name">Trimestral<br><span class="muted" style="font-size:1rem; font-family: var(--font-body); font-weight: 400">+ 1 mês de bônus</span></div>
+        <div class="for">Para quem quer montar a base do processo em 4 meses e seguir sozinho.</div>
+        <div class="price"><div class="main">12x R$ 1.750</div><div class="sub">ou R$ 17.500 à vista · total R$ 21.000</div></div>
+        <ul>
+          <li>Hot seats quinzenais em grupo, por 4 meses</li>
+          <li>1 encontro individual com Henrique (2 sessões)</li>
+          <li>1 encontro com especialista e o seu time</li>
+          <li>Esteira, scripts, indicadores, plano de atendimento e reunião 1x1</li>
+          <li>Tutoria mensal com o seu time de vendas</li>
+          <li class="off">Implementação de CRM comercial</li>
+          <li class="off">Acompanhamento semanal do time</li>
+        </ul>
+        <a class="btn btn-ghost" href="#diagnostico">Começar pelo diagnóstico</a>
+      </div>
+
+      <div class="plan featured reveal" data-delay="1">
+        <span class="tag pill">A que eu recomendo</span>
+        <div class="name">Avançada em Grupo<br><span class="muted" style="font-size:1rem; font-family: var(--font-body); font-weight: 400">12 meses</span></div>
+        <div class="for">Para o empresário de serviços que quer o processo montado e o time rodando até o fim do ano.</div>
+        <div class="price"><div class="main">12x R$ 3.750</div><div class="sub">ou R$ 37.500 à vista · entrada de R$ 15 mil + 10x R$ 3 mil</div></div>
+        <ul>
+          <li>Hot seats quinzenais em grupo, o ano inteiro</li>
+          <li>2 encontros individuais com Henrique (3 sessões)</li>
+          <li>2 encontros com especialista e o seu time</li>
+          <li>Esteira, scripts, indicadores, plano de atendimento e reunião 1x1</li>
+          <li>Tutoria mensal com o seu time de vendas, por 12 meses</li>
+          <li>Bônus: sessão individual extra, plano de palestras como funil e tutoria de IA e tecnologia</li>
+          <li class="off">Implementação de CRM comercial</li>
+        </ul>
+        <a class="btn" href="#diagnostico">Começar pelo diagnóstico <span class="arrow">→</span></a>
+      </div>
+
+      <div class="plan reveal" data-delay="2">
+        <div class="name">Premium<br><span class="muted" style="font-size:1rem; font-family: var(--font-body); font-weight: 400">In Company · 12 meses</span></div>
+        <div class="for">Para quem quer o Henrique dentro da empresa, com o time, toda semana nos primeiros 90 dias.</div>
+        <div class="price"><div class="main">12x R$ 10.000</div><div class="sub">ou R$ 100.000 à vista · entrada de R$ 36 mil + 10x R$ 8.400</div></div>
+        <ul>
+          <li>Tudo da Avançada em Grupo</li>
+          <li>9 encontros individuais com Henrique (10 sessões)</li>
+          <li>Encontro semanal com o seu time de vendas nos primeiros 90 dias</li>
+          <li>Implementação do CRM comercial com o parceiro de tecnologia</li>
+          <li>Tutoria mensal de IA e automação para o atendimento</li>
+        </ul>
+        <a class="btn btn-ghost" href="#diagnostico">Começar pelo diagnóstico</a>
+      </div>
+    </div>
+
+    <div class="price-arg">
+      <div class="big-compare reveal">
+        <div><div class="n">R$ 3.750</div><div class="l">por mês, a Avançada</div></div>
+        <div class="vs">ou</div>
+        <div><div class="n">R$ 3.750</div><div class="l">um funcionário a mais</div></div>
+      </div>
+      <div class="stack reveal" data-delay="1">
+        <p class="lead">É a conta que eu faço com todo mundo. Um funcionário a mais, nesse valor, quase nunca muda o termômetro da empresa. Um processo que o time que você já tem passa a executar, muda.</p>
+        <p class="muted">Se quiser comparar com o mercado: um clube anual de uma escola de negócios conhecida custa na casa de R$ 350 mil e não tem encontro individual. A imersão de três dias deles, que eu fiz, custou R$ 17 mil e acabou na quinta-feira. Aqui a quinta-feira é só o começo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PARA QUEM ============================ -->
+<section class="section on-paper-2">
+  <div class="container grid-2">
+    <div class="stack">
+      <span class="eyebrow reveal">Para quem é</span>
+      <h2 class="reveal" data-delay="1">Funciona bem para três tipos de empresa. E mal para dois.</h2>
+    </div>
+    <div class="stack reveal" data-delay="1">
+      <div class="deliverable"><div class="idx">✓</div><div><div class="t">Clínica, consultório ou escritório que já fatura e depende do dono para vender</div><div class="d">Médico, dentista, advogado, contador, arquiteto. Bom de entrega, com agenda cheia de operacional e venda feita "na carteira".</div></div></div>
+      <div class="deliverable"><div class="idx">✓</div><div><div class="t">Empresa de treinamento, mentoria ou educação</div><div class="d">Quem vende conhecimento e precisa de prospecção ativa, esteira de produtos e um time que converta sem o fundador em todas as reuniões.</div></div></div>
+      <div class="deliverable"><div class="idx">✓</div><div><div class="t">Franquia ou negócio de serviço com time comercial de 2 a 20 pessoas</div><div class="d">Onde já existe time, mas não existe processo, indicador nem ritual de liderança.</div></div></div>
+      <div class="deliverable"><div class="idx">✕</div><div><div class="t">Quem quer que eu venda no lugar do time</div><div class="d">Mentoria não é terceirização. Eu monto com vocês e acompanho; quem executa é a sua empresa.</div></div></div>
+      <div class="deliverable"><div class="idx">✕</div><div><div class="t">Quem não tem duas horas por semana para isso</div><div class="d">Vai exigir tempo: hot seat quinzenal, implementação, reunião com o time. Se a agenda não cabe hoje, é melhor começar pelo Trimestral ou esperar.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FAQ ============================ -->
+<section class="section" id="faq">
+  <div class="container grid-2">
+    <div class="stack">
+      <div class="sec-num reveal"><b>04</b> As objeções de verdade</div>
+      <h2 class="reveal" data-delay="1">O que as pessoas me perguntam antes de entrar.</h2>
+      <p class="lead reveal" data-delay="2">Respondidas do jeito que eu respondo na reunião, sem rodeio.</p>
+    </div>
+    <div class="faq reveal" data-delay="1">
+      <details>
+        <summary>Eu não quero aparecer no Instagram. Isso me tira do jogo?</summary>
+        <div class="a"><p>Não. Eu também não queria, e disse isso para o meu próprio mentor. O processo da ESL começa por prospecção ativa, indicação e atendimento, que não dependem de seguidor. Conteúdo é a terceira camada, e entra só quando as duas primeiras estão rodando.</p></div>
+      </details>
+      <details>
+        <summary>Meu negócio é muito técnico. Venda de serviço médico é diferente.</summary>
+        <div class="a"><p>A técnica é diferente. A venda, não. O paciente decide pelo mesmo motivo que o franqueado de R$ 300 mil decidiu: confiança, clareza da oferta e alguém que acompanha depois do sim. O que muda é o script, e o script a gente escreve junto.</p></div>
+      </details>
+      <details>
+        <summary>Não tenho time de vendas. Sou eu.</summary>
+        <div class="a"><p>Então o primeiro processo é o seu. A esteira, o atendimento e a reunião 1 a 1 são montados para você executar, e o módulo de liderança serve para a primeira contratação, que costuma acontecer no meio do programa, quando a agenda estoura. No Trimestral isso já cabe.</p></div>
+      </details>
+      <details>
+        <summary>Já fiz imersão de escola de negócios. Qual é a diferença?</summary>
+        <div class="a"><p>Eu fiz também. Três dias ótimos, cheios de framework. A diferença é que imersão termina na quinta e a sua empresa continua na segunda. Aqui são 12 meses, com hot seat a cada 15 dias e tutoria com o seu time todo mês. Não é mais conteúdo. É implementação.</p></div>
+      </details>
+      <details>
+        <summary>Não tenho tempo.</summary>
+        <div class="a"><p>Vai exigir tempo mesmo: umas duas horas por semana, mais o tempo de implementar. Se isso não cabe hoje, eu prefiro que você não entre agora do que entre e não execute. O que eu posso dizer é que o tempo que você investe no processo volta na forma de reunião que o time faz sem você.</p></div>
+      </details>
+      <details>
+        <summary>Por que não contratar um gerente comercial?</summary>
+        <div class="a"><p>Contrate. Mas contrate depois de ter processo, senão ele chega, não encontra nada, e você paga R$ 12 mil por mês para alguém inventar do zero o que eu já montei em três mercados. Com processo, o gerente chega para operar, não para descobrir.</p></div>
+      </details>
+      <details>
+        <summary>Você nunca mentorou médicos ou advogados.</summary>
+        <div class="a"><p>É verdade, e está escrito lá em cima. Eu vendi e ensinei a vender serviço, treinamento, produto e franquia para mais de 30 mil pessoas. Se o seu critério é alguém que já mentorou cem clínicas, eu não sou essa pessoa. Se o critério é alguém que monta processo de venda dentro de empresa e fica um ano do lado, é disso que esta página fala.</p></div>
+      </details>
+      <details>
+        <summary>Como funciona a entrada?</summary>
+        <div class="a"><p>Você preenche o diagnóstico abaixo. Eu leio, e se fizer sentido a gente marca uma conversa de 20 a 30 minutos. Nela eu te dou um direcionamento, com ou sem mentoria. Se depois disso fizer sentido para os dois, a gente fala de formato e valor.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ QUEM É ============================ -->
+<section class="section on-paper">
+  <div class="container grid-2">
+    <div class="reveal">
+      <div class="photo-slot square natural framed"><img src="assets/img/henrique-familia.jpg" alt="Henrique Ventura com a esposa Suelen e o filho Gael"></div>
+    </div>
+    <div class="stack">
+      <span class="eyebrow reveal">Quem é</span>
+      <h2 class="reveal" data-delay="1">Henrique Ventura</h2>
+      <p class="lead reveal" data-delay="2">Empresário há 12 anos. Liderou mais de 30 mil pessoas no marketing de relacionamento, foi diretor de expansão de uma franqueadora de construção a seco e hoje é sócio de uma empresa de imigração para os Estados Unidos, com o time lá e ele aqui.</p>
+      <p class="reveal" data-delay="3">Fala portunhol com confiança, já perdeu R$ 12 mil num esquema que prometia retorno rápido, e ainda ensaia mentalmente a primeira frase antes de entrar numa sala, só que agora a sala tem 20 mil pessoas. Casado há 17 anos com a Suelen, pai do Gael.</p>
+      <p class="muted reveal" data-delay="3">@venturahenrique no Instagram e no Threads.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ DIAGNÓSTICO ============================ -->
+<section class="section glow" id="diagnostico">
+  <div class="container grid-2">
+    <div class="stack">
+      <div class="sec-num reveal"><b>05</b> O próximo passo</div>
+      <h2 class="reveal" data-delay="1">Antes do preço, uma pergunta.</h2>
+      <p class="lead reveal" data-delay="2">Resolver vendas na sua empresa, nos próximos 12 meses, é o quê para você?</p>
+      <div class="commit reveal" data-delay="3" id="commit">
+        <label><input type="radio" name="commit" value="max"> <span>Prioridade máxima. É o gargalo da empresa hoje.</span></label>
+        <label><input type="radio" name="commit" value="imp"> <span>Importante, mas tem coisa na frente.</span></label>
+        <label><input type="radio" name="commit" value="nao"> <span>Ainda não é relevante. Estou só olhando.</span></label>
+      </div>
+      <p class="small muted reveal" data-delay="3" id="commit-msg">Qualquer resposta é válida. A terceira também: nesse caso, guarda a página e volta quando doer.</p>
+    </div>
+    <form class="form card reveal" data-delay="2" id="form-diag">
+      <div class="field"><label for="f-nome">Seu nome</label><input id="f-nome" name="nome" required autocomplete="name"></div>
+      <div class="field"><label for="f-emp">Empresa e o que ela vende</label><input id="f-emp" name="empresa" required placeholder="Ex.: clínica de dermatologia em Maringá"></div>
+      <div class="field"><label for="f-fat">Faturamento mensal aproximado</label>
+        <select id="f-fat" name="faturamento" required>
+          <option value="">Escolher</option>
+          <option>Até R$ 30 mil</option>
+          <option>R$ 30 a 80 mil</option>
+          <option>R$ 80 a 200 mil</option>
+          <option>R$ 200 a 500 mil</option>
+          <option>Acima de R$ 500 mil</option>
+        </select>
+      </div>
+      <div class="field"><label for="f-time">Quantas pessoas vendem hoje (contando você)</label><input id="f-time" name="time" required placeholder="Ex.: 1, 3, 12"></div>
+      <div class="field"><label for="f-des">O maior desafio para crescer nos próximos 12 meses</label><textarea id="f-des" name="desafio" rows="4" required placeholder="Em uma ou duas frases, do seu jeito."></textarea></div>
+      <div class="field"><label for="f-wpp">Seu WhatsApp</label><input id="f-wpp" name="whatsapp" required inputmode="tel" placeholder="(11) 9 9999-9999"></div>
+      <button class="btn btn-lg btn-block" type="submit" id="btn-send">Enviar diagnóstico <span class="arrow">→</span></button>
+      <div class="btn-note center">Abre no WhatsApp do Henrique com o seu diagnóstico pronto · resposta em até 2 dias úteis</div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <img class="seal" src="assets/seal.svg" alt="Selo ESL" width="120" height="120">
+    <p class="legal">Programa de mentoria de Henrique Ventura. Os números desta página são de times liderados e empresas onde o processo foi implantado por ele; não são garantia de resultado para a sua empresa. Resultado depende de execução. Nenhuma promessa de faturamento é feita aqui, e se alguém fizer em meu nome, desconfie.</p>
+    <p class="small muted">Vendas sempre foram sobre pessoas.<br>Tamo juntos.</p>
+  </div>
+</footer>
+
+<div class="sticky-cta" id="sticky">
+  <div class="t">ESL · 12 meses · começa pelo diagnóstico</div>
+  <a class="btn" href="#diagnostico">Diagnóstico →</a>
+</div>
+
+<script>
+  // ---- Número do WhatsApp do Henrique (com DDI, só dígitos). PENDENTE: confirmar. ----
+  const WHATSAPP = '5511999999999';
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  // Fallback: o que já está na tela no carregamento aparece mesmo se o observer atrasar
+  setTimeout(() => document.querySelectorAll('.reveal:not(.in)').forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in'); }), 900);
+
+  // Sticky CTA aparece depois do hero
+  const hero = document.querySelector('.hero');
+  const sticky = document.getElementById('sticky');
+  const diag = document.getElementById('diagnostico');
+  const heroIO = new IntersectionObserver(([e]) => sticky.classList.toggle('show', !e.isIntersecting && !diagVisible), { threshold: 0.05 });
+  let diagVisible = false;
+  const diagIO = new IntersectionObserver(([e]) => { diagVisible = e.isIntersecting; if (diagVisible) sticky.classList.remove('show'); }, { threshold: 0.2 });
+  heroIO.observe(hero); diagIO.observe(diag);
+
+  // Pré-compromisso muda o botão
+  const msgs = {
+    max: { btn: 'Enviar diagnóstico agora →', msg: 'Então o diagnóstico é o lugar certo. Eu leio pessoalmente.' },
+    imp: { btn: 'Enviar diagnóstico mesmo assim →', msg: 'Faz sentido. O diagnóstico também serve para você saber por onde começar quando chegar a hora.' },
+    nao: { btn: 'Enviar diagnóstico, só para ter →', msg: 'Sem problema. Se quiser, preenche mesmo assim: eu respondo com um direcionamento e não insisto.' }
+  };
+  document.getElementById('commit').addEventListener('change', (e) => {
+    const m = msgs[e.target.value]; if (!m) return;
+    document.getElementById('btn-send').innerHTML = m.btn;
+    document.getElementById('commit-msg').textContent = m.msg;
+  });
+
+  // Formulário → WhatsApp com texto pronto
+  document.getElementById('form-diag').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const commit = document.querySelector('input[name=commit]:checked');
+    const prior = commit ? ({max:'Prioridade máxima', imp:'Importante', nao:'Só olhando'})[commit.value] : 'não informado';
+    const txt = [
+      `Diagnóstico ESL`,
+      `Nome: ${f.get('nome')}`,
+      `Empresa: ${f.get('empresa')}`,
+      `Faturamento: ${f.get('faturamento')}`,
+      `Pessoas vendendo: ${f.get('time')}`,
+      `Prioridade: ${prior}`,
+      `Maior desafio: ${f.get('desafio')}`,
+      `WhatsApp: ${f.get('whatsapp')}`
+    ].join('\n');
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(txt)}`, '_blank', 'noopener');
+  });
+</script>
+</body>
+</html>

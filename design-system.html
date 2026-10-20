@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESL Design System</title>
+<link rel="stylesheet" href="assets/esl.css">
+<style>
+  .ds-nav { position: sticky; top: 0; z-index: 30; background: rgba(7,14,28,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--hair); padding: var(--s-3) 0; }
+  .ds-nav .container { display: flex; gap: var(--s-5); align-items: center; overflow-x: auto; font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--track-mid); text-transform: uppercase; }
+  .ds-nav a { text-decoration: none; color: var(--mist); white-space: nowrap; }
+  .ds-nav a:hover { color: var(--gold-400); }
+  .swatches { display: grid; gap: 0; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); border-top: 1px solid var(--hair); border-left: 1px solid var(--hair); }
+  .sw { border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+  .sw .c { height: 84px; }
+  .sw .i { padding: var(--s-3); font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em; display: grid; gap: 2px; }
+  .sw .i b { font-weight: 500; color: var(--champagne); }
+  .on-paper .swatches, .on-paper .sw { border-color: var(--hair-ink); }
+  .type-row { display: grid; grid-template-columns: 140px 1fr; gap: var(--s-4); align-items: baseline; padding: var(--s-4) 0; border-top: 1px solid var(--hair-ink); }
+  .type-row .k { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em; color: var(--ink-3); text-transform: uppercase; }
+  .demo { padding: var(--s-5) 0; border-top: 1px solid var(--hair-ink); }
+  .spacing { display: flex; gap: var(--s-3); align-items: flex-end; flex-wrap: wrap; }
+  .spacing div { background: var(--gold-500); width: 20px; }
+  .spacing span { font-family: var(--font-mono); font-size: 0.6rem; color: var(--mist-2); display: block; margin-top: 4px; }
+  code { font-family: var(--font-mono); font-size: 0.8rem; color: var(--gold-400); }
+  .on-paper code { color: var(--gold-600); }
+  pre { font-family: var(--font-mono); font-size: 0.78rem; background: var(--navy-950); border: 1px solid var(--hair); padding: var(--s-4); overflow: auto; color: var(--mist); }
+  .tells { display: grid; grid-template-columns: 1fr; gap: 0; }
+  @media (min-width: 820px) { .tells { grid-template-columns: 1fr 1fr; } }
+  .tells .col { padding: var(--s-5) var(--s-6) var(--s-5) 0; }
+  .tells .col + .col { border-left: 1px solid var(--hair-ink); padding-left: var(--s-6); }
+  .tells h4 { font-family: var(--font-mono); font-weight: 500; font-size: var(--fs-eyebrow); letter-spacing: var(--track-wide); text-transform: uppercase; margin: 0 0 var(--s-4); }
+  .tells ul { margin: 0; padding-left: 1.1em; color: var(--ink-2); font-size: var(--fs-small); display: grid; gap: var(--s-2); }
+</style>
+</head>
+<body class="grain">
+<nav class="ds-nav"><div class="container">
+  <a href="index.html" class="gold">← Site</a>
+  <a href="#principios">Princípios</a><a href="#cores">Cores</a><a href="#tipo">Tipografia</a><a href="#espaco">Grade</a><a href="#comp">Componentes</a><a href="#foto">Fotografia</a><a href="#voz">Voz</a><a href="#uso">Como usar</a>
+</div></nav>
+
+<header class="section">
+  <div class="container grid-2">
+    <div class="stack">
+      <span class="eyebrow">Design system · v2 · outubro 2026</span>
+      <h1>ESL</h1>
+      <p class="lead">Um sistema único para tudo do Henrique Ventura: site, apresentações de fechamento, posts e PDFs. A referência é revista de luxo, não software: Didone no display, cantos retos, fios finos de grade, marinho profundo, papel e champanhe.</p>
+      <div class="flex"><a class="btn" href="index.html">Página de vendas</a><a class="btn btn-ghost" href="apresentacao.html">Apresentações</a></div>
+    </div>
+    <div style="display:grid;place-items:center;padding:var(--s-6) 0"><img class="seal" src="assets/seal.svg" alt="Selo ESL" width="180" height="180" style="width:180px;height:180px"></div>
+  </div>
+</header>
+
+<section class="section on-paper" id="principios"><div class="container stack-lg">
+  <div class="stack"><div class="sec-num"><b>01</b> Princípios</div><h2>O que faz parecer feito por gente, não por máquina.</h2></div>
+  <div class="tells">
+    <div class="col"><h4 style="color:var(--signal)">O que a v1 tinha (e os sinais de "feito por IA")</h4><ul>
+      <li>Três cards iguais, lado a lado, com cantos arredondados e sombra</li>
+      <li>Brilho degradê dourado atrás de tudo</li>
+      <li>Pílula colorida acima do título</li>
+      <li>Tudo centralizado, sem grade visível</li>
+      <li>Serifa "de convite de casamento" (Cormorant)</li>
+      <li>Fotos sem tratamento, cada uma com uma luz</li>
+    </ul></div>
+    <div class="col"><h4 style="color:var(--gold-600)">O que a v2 faz no lugar</h4><ul>
+      <li>Listas numeradas e colunas separadas por fio, sem caixa</li>
+      <li>Fundo chapado com grão de papel; o ouro só em fio, número e botão</li>
+      <li>Numeração editorial de seção: <span class="mono">01 — História</span></li>
+      <li>Grade de 5/7 colunas, assimétrica, com fios de margem nos slides</li>
+      <li>Bodoni Moda, a Didone das revistas de moda e luxo, com eixo óptico</li>
+      <li>Fotos em duotone marinho/champanhe, com moldura deslocada</li>
+    </ul></div>
+  </div>
+  <div class="ruled" style="--cols:3">
+    <div class="stack"><h3>Papel e marinho se alternam</h3><p class="small">Seção escura, seção clara. A pessoa se localiza ao rolar. Nunca duas seções do mesmo tom em sequência.</p></div>
+    <div class="stack"><h3>O ouro é tempero</h3><p class="small">Fio, número, rótulo, botão principal e a opção "à vista". Fundo dourado em mais de um lugar por tela vira flyer.</p></div>
+    <div class="stack"><h3>Design a serviço da copy</h3><p class="small">Cada bloco existe para sustentar um argumento. Se o visual chama mais atenção que a frase, o visual está errado.</p></div>
+  </div>
+</div></section>
+
+<section class="section" id="cores"><div class="container stack-lg">
+  <div class="stack"><div class="sec-num"><b>02</b> Cores</div><h2>Paleta</h2><p class="lead">Todas disponíveis como variáveis CSS em <code>:root</code>. Fios usam transparência, nunca cinza chapado.</p></div>
+  <div class="stack">
+    <h3>Marinho (fundos escuros)</h3>
+    <div class="swatches">
+      <div class="sw"><div class="c" style="background:var(--navy-950)"></div><div class="i"><b>--navy-950</b>#040812 · fundo dos decks</div></div>
+      <div class="sw"><div class="c" style="background:var(--navy-900)"></div><div class="i"><b>--navy-900</b>#070E1C · fundo padrão</div></div>
+      <div class="sw"><div class="c" style="background:var(--navy-800)"></div><div class="i"><b>--navy-800</b>#0B1629 · seções alternadas</div></div>
+      <div class="sw"><div class="c" style="background:var(--navy-700)"></div><div class="i"><b>--navy-700</b>#10213B · superfícies</div></div>
+      <div class="sw"><div class="c" style="background:var(--navy-600)"></div><div class="i"><b>--navy-600</b>#1A3357 · duotone das fotos</div></div>
+    </div>
+    <h3>Ouro e champanhe (destaque)</h3>
+    <div class="swatches">
+      <div class="sw"><div class="c" style="background:var(--gold-600)"></div><div class="i"><b>--gold-600</b>#A07E2E · ouro sobre papel</div></div>
+      <div class="sw"><div class="c" style="background:var(--gold-500)"></div><div class="i"><b>--gold-500</b>#C19A45 · botão, fio forte</div></div>
+      <div class="sw"><div class="c" style="background:var(--gold-400)"></div><div class="i"><b>--gold-400</b>#D9B866 · rótulos e números sobre marinho</div></div>
+      <div class="sw"><div class="c" style="background:var(--champagne)"></div><div class="i"><b>--champagne</b>#F0E2BE · números grandes, marca</div></div>
+    </div>
+    <h3>Papel e tinta</h3>
+    <div class="swatches">
+      <div class="sw"><div class="c" style="background:var(--paper)"></div><div class="i"><b>--paper</b>#F4EEE2 · fundo claro e texto sobre marinho</div></div>
+      <div class="sw"><div class="c" style="background:var(--paper-2)"></div><div class="i"><b>--paper-2</b>#EBE3D2 · seção clara alternativa</div></div>
+      <div class="sw"><div class="c" style="background:var(--paper-3)"></div><div class="i"><b>--paper-3</b>#DCD1BA · bordas</div></div>
+      <div class="sw"><div class="c" style="background:var(--ink)"></div><div class="i"><b>--ink</b>#12161F · texto sobre papel</div></div>
+      <div class="sw"><div class="c" style="background:var(--ink-2)"></div><div class="i"><b>--ink-2</b>#3A414E · texto secundário</div></div>
+      <div class="sw"><div class="c" style="background:var(--ink-3)"></div><div class="i"><b>--ink-3</b>#6F7684 · rótulos sobre papel</div></div>
+      <div class="sw"><div class="c" style="background:var(--signal)"></div><div class="i"><b>--signal</b>#C8402F · preço riscado, "não faz"</div></div>
+    </div>
+    <div class="lesson"><b>Fios</b><code>--hair</code> (papel a 14% sobre marinho), <code>--hair-gold</code> (ouro a 45%) e <code>--hair-ink</code> (tinta a 14% sobre papel). Toda divisão de conteúdo é um fio de 1px; caixa com fundo só quando a superfície precisa existir (formulário, foto).</div>
+  </div>
+</div></section>
+
+<section class="section on-paper" id="tipo"><div class="container stack-lg">
+  <div class="stack"><div class="sec-num"><b>03</b> Tipografia</div><h2>Três famílias, três papéis.</h2></div>
+  <div>
+    <div class="type-row"><div class="k">Display · h1</div><div class="h1">Bodoni Moda 500</div></div>
+    <div class="type-row"><div class="k">h2</div><div class="h2">A exceção tem processo.</div></div>
+    <div class="type-row"><div class="k">h3</div><div class="h3">Garçom, depois telefone.</div></div>
+    <div class="type-row"><div class="k">Ênfase</div><div class="h2">Sempre em <em class="gold">itálico dourado</em>, nunca em negrito</div></div>
+    <div class="type-row"><div class="k">Capitular</div><div><p class="dropcap measure">Zona Leste de São Paulo, numa rua que o pessoal chamava de Rua da Fumaça. A capitular abre o primeiro parágrafo de uma história, e só ele.</p></div></div>
+    <div class="type-row"><div class="k">Lead</div><div class="lead">Instrument Sans em 1,1 a 1,25rem, cor rebaixada. Para o parágrafo de abertura de cada seção, no máximo 60 caracteres por linha.</div></div>
+    <div class="type-row"><div class="k">Corpo</div><div><p>Instrument Sans 1,0625rem, entrelinha 1,62. Parágrafos curtos, de uma a três linhas. É a voz do Henrique falando, então frases simples e diretas.</p></div></div>
+    <div class="type-row"><div class="k">Rótulo</div><div><span class="eyebrow">Eyebrow com régua</span> &nbsp; <span class="eyebrow no-rule">Sem régua</span> &nbsp; <span class="pill">Etiqueta</span></div></div>
+    <div class="type-row"><div class="k">Seção</div><div class="sec-num"><b>07</b> Numeração editorial</div></div>
+    <div class="type-row"><div class="k">Número</div><div class="stat"><div class="n">30 mil</div><div class="l">pessoas lideradas</div></div></div>
+    <div class="type-row"><div class="k">Citação</div><blockquote class="quote">Onde passa um boi, passa uma boiada.<cite>Henrique Ventura</cite></blockquote></div>
+  </div>
+  <pre>--font-display: 'Bodoni Moda'      /* títulos, números grandes, citações, capitular */
+--font-body:    'Instrument Sans'  /* parágrafos, listas */
+--font-mono:    'DM Mono'          /* rótulos em caixa alta, valores, datas, botões */
+
+Bodoni Moda é variável: use font-variation-settings "opsz" 96 em títulos grandes
+e "opsz" 36 em h3, para o contraste das hastes acompanhar o tamanho.</pre>
+</div></section>
+
+<section class="section" id="espaco"><div class="container stack-lg">
+  <div class="stack"><div class="sec-num"><b>04</b> Grade e espaço</div><h2>Assimétrica por padrão.</h2></div>
+  <div class="grid-2">
+    <div class="stack">
+      <h3>Colunas</h3>
+      <p class="small"><code>.grid-2</code> divide 5/7: título e contexto à esquerda, conteúdo à direita. <code>.grid-2.even</code> para 1/1. <code>.ruled</code> cria colunas separadas por fio vertical, sem caixas.</p>
+      <p class="small">Nos slides, dois fios verticais a 70px das bordas marcam a página, como a marca de corte de uma revista. A área útil vai de 150px a 790px.</p>
+    </div>
+    <div class="stack">
+      <h3>Escala</h3>
+      <div class="spacing">
+        <div><div style="height:4px"></div><span>s-1</span></div><div><div style="height:8px"></div><span>s-2</span></div><div><div style="height:12px"></div><span>s-3</span></div><div><div style="height:16px"></div><span>s-4</span></div><div><div style="height:24px"></div><span>s-5</span></div><div><div style="height:32px"></div><span>s-6</span></div><div><div style="height:48px"></div><span>s-7</span></div><div><div style="height:64px"></div><span>s-8</span></div><div><div style="height:96px"></div><span>s-9</span></div>
+      </div>
+      <p class="small muted">Cantos: 0px. Sombras: nenhuma. A profundidade vem do contraste papel/marinho, não de blur.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="section on-paper-2" id="comp"><div class="container stack-lg">
+  <div class="stack"><div class="sec-num"><b>05</b> Componentes</div><h2>Tudo que o site e os slides usam.</h2></div>
+
+  <div class="stack"><h3>Botões</h3><div class="demo flex"><a class="btn" href="#">Começar pelo diagnóstico <span class="arrow">→</span></a><a class="btn btn-ghost" href="#">Ler a história primeiro</a><a class="btn btn-lg" href="#">Grande</a></div>
+  <p class="small muted">Tipográficos: mono, caixa alta, retos. Um principal por dobra. Texto em verbo de entrada ("começar", "entrar", "ver"), nunca "compre" ou "garanta".</p></div>
+
+  <div class="stack"><h3>Item numerado</h3><div class="demo">
+    <div class="deliverable has-v"><div class="idx">01</div><div><div class="t">Script da reunião 1x1</div><div class="d">Abertura, diagnóstico, oferta, preço e fechamento.</div></div><div class="v">R$ 12.000</div></div>
+    <div class="deliverable has-v"><div class="idx">02</div><div><div class="t">Indicadores personalizados</div><div class="d">Os 5 a 7 números que o dono olha toda semana.</div></div><div class="v">R$ 7.000</div></div>
+  </div><p class="small muted">Substitui o card em quase todo lugar: entregáveis, pilares, "para quem é", provas.</p></div>
+
+  <div class="stack"><h3>Nota de margem, espelho e comparativo</h3><div class="demo grid-2 even">
+    <div class="stack"><div class="lesson"><b>O que ficou</b>Vendas não é dom. É um processo que dá para ensinar.</div>
+    <div class="mirror"><div class="m">Não tem gente boa no mercado.</div><div class="m">Crescer virou sinônimo de mais problema.</div></div></div>
+    <div class="compare"><div class="col bad"><h4>Como a maioria tenta</h4><ul><li>Compra um CRM antes do processo</li></ul></div><div class="col good"><h4>Na ESL</h4><ul><li>Processo antes da ferramenta</li></ul></div></div>
+  </div></div>
+
+  <div class="stack"><h3>Planos</h3><div class="demo"><div class="plans" style="max-width:720px">
+    <div class="plan"><div class="name">Trimestral<span class="muted">4 meses</span></div><div class="for">A base do processo em 4 meses.</div><div class="price"><div class="main">12x R$ 1.750</div><div class="sub">ou R$ 17.500 à vista</div></div><ul><li>Hot seats quinzenais</li><li class="off">CRM comercial</li></ul><a class="btn btn-ghost" href="#">Diagnóstico</a></div>
+    <div class="plan featured"><span class="tag">A que eu recomendo</span><div class="name">Avançada em Grupo<span class="muted">12 meses</span></div><div class="for">Processo montado e time rodando até o fim do ano.</div><div class="price"><div class="main">12x R$ 3.750</div><div class="sub">ou R$ 37.500 à vista</div></div><ul><li>Hot seats quinzenais</li><li>2 encontros individuais</li></ul><a class="btn" href="#">Diagnóstico</a></div>
+  </div></div><p class="small muted">Colunas de tabela separadas por fio. O destaque é um fio de 3px dourado no topo, não uma caixa brilhante.</p></div>
+
+  <div class="stack"><h3>FAQ, pré-compromisso e formulário</h3><div class="demo grid-2 even">
+    <div><div class="faq"><details><summary>Não tenho tempo.</summary><div class="a">Vai exigir tempo mesmo: umas duas horas por semana.</div></details></div>
+    <div class="commit" style="margin-top:var(--s-5)"><label><input type="radio" name="c"> <span>Prioridade máxima.</span></label><label><input type="radio" name="c"> <span>Importante, mas tem coisa na frente.</span></label></div></div>
+    <form class="form"><div class="field"><label>Seu nome</label><input placeholder="Henrique"></div><div class="field"><label>Faturamento</label><select><option>R$ 80 a 200 mil</option></select></div></form>
+  </div><p class="small muted">Campos só com linha de base: o formulário parece uma ficha, não um app.</p></div>
+</div></section>
+
+<section class="section" id="foto"><div class="container stack-lg">
+  <div class="stack"><div class="sec-num"><b>06</b> Fotografia</div><h2>Duotone por padrão, natural quando a foto é o assunto.</h2></div>
+  <div class="grid-3" style="gap:var(--s-5)">
+    <div class="stack"><div class="photo-slot framed"><img src="assets/img/henrique-familia.jpg" alt=""></div><p class="small muted"><code>.photo-slot.framed</code>: preto e branco com marinho em multiply e champanhe em screen. Unifica fotos de origens diferentes.</p></div>
+    <div class="stack"><div class="photo-slot natural framed"><img src="assets/img/henrique-familia.jpg" alt=""></div><p class="small muted"><code>.natural</code>: sem tratamento. Para quando a foto é o conteúdo (família, bastidores).</p></div>
+    <div class="stack"><div class="photo-slot framed"><span class="mark">HV</span><span class="cap">Foto · a inserir</span></div><p class="small muted">Sem imagem, o slot mostra o monograma. A moldura (<code>.framed</code>) é um fio dourado deslocado 12px, assinatura de revista.</p></div>
+  </div>
+  <div class="lesson"><b>Pendente</b>Retrato profissional do Henrique (camisa azul no escritório, poltrona, palestrando). Essas fotos existem nos PDFs do Canva; pedir os originais a ele para o hero do site e a capa dos decks.</div>
+</div></section>
+
+<section class="section on-paper" id="voz"><div class="container grid-2">
+  <div class="stack"><div class="sec-num"><b>07</b> Voz</div><h2>Como o sistema fala.</h2><p class="lead">A copy segue o marketing de premissas: fatos encadeados até a conclusão, na voz do Henrique.</p></div>
+  <div>
+    <div class="deliverable"><div class="idx">01</div><div><div class="t">Sem imperativo de guru</div><div class="d">Nada de "descubra", "garanta", "transforme". Títulos em afirmação ou em cena.</div></div></div>
+    <div class="deliverable"><div class="idx">02</div><div><div class="t">Sem pergunta retórica do problema</div><div class="d">A dor aparece na voz do cliente, entre aspas.</div></div></div>
+    <div class="deliverable"><div class="idx">03</div><div><div class="t">Número específico, nome próprio, cena</div><div class="d">"Quatro lojas, R$ 8 milhões, sem CRM" em vez de "muitas empresas vendem sem processo".</div></div></div>
+    <div class="deliverable"><div class="idx">04</div><div><div class="t">Autoridade seguida de autodepreciação</div><div class="d">"Falei para 20 mil pessoas" vem junto de "num portunhol vergonhoso".</div></div></div>
+    <div class="deliverable"><div class="idx">05</div><div><div class="t">Venda declarada</div><div class="d">A seção de oferta se chama "Momento jabá, declarado".</div></div></div>
+    <div class="deliverable"><div class="idx">06</div><div><div class="t">Prova é o que existe</div><div class="d">Sem depoimento inventado. Enquanto não houver mentorado com resultado, a página diz isso.</div></div></div>
+    <div class="deliverable"><div class="idx">07</div><div><div class="t">Palavras que não entram</div><div class="d">"Pirâmide" e "multinível" como rótulo. O termo é "marketing de relacionamento"; o episódio de 2013 é "um esquema que prometia retorno rápido".</div></div></div>
+  </div>
+</div></section>
+
+<section class="section" id="uso"><div class="container stack-lg">
+  <div class="stack"><div class="sec-num"><b>08</b> Como usar</div><h2>Arquivos</h2></div>
+  <div class="grid-2">
+    <div>
+      <div class="deliverable"><div class="idx">CSS</div><div><div class="t">assets/esl.css</div><div class="d">Tokens, tipografia, grade e componentes. Importar em qualquer página nova.</div></div></div>
+      <div class="deliverable"><div class="idx">SVG</div><div><div class="t">assets/seal.svg</div><div class="d">Selo-monograma. Rodapé do site, fechamento de deck, marca d'água em PDF.</div></div></div>
+      <div class="deliverable"><div class="idx">HTML</div><div><div class="t">index.html</div><div class="d">Página de vendas. O número do WhatsApp está na constante <code>WHATSAPP</code> no fim do arquivo.</div></div></div>
+      <div class="deliverable"><div class="idx">HTML</div><div><div class="t">apresentacao.html?plano=avancada|premium|trimestral</div><div class="d">Os três decks, gerados a partir de <code>assets/decks.js</code>. <code>&amp;nome=…&amp;negocio=…</code> personaliza. Setas, F, Ctrl+P.</div></div></div>
+      <div class="deliverable"><div class="idx">JS</div><div><div class="t">assets/decks.js</div><div class="d">Entregáveis, valores, bônus, preços e o mapa de fotos (<code>PHOTOS</code>). Mudou o preço? Muda aqui e os três decks acompanham.</div></div></div>
+    </div>
+    <div class="stack">
+      <h3>Para uma seção nova</h3>
+      <pre>&lt;section class="section on-paper"&gt;
+  &lt;div class="container grid-2"&gt;
+    &lt;div class="stack"&gt;
+      &lt;div class="sec-num"&gt;&lt;b&gt;03&lt;/b&gt; Rótulo&lt;/div&gt;
+      &lt;h2&gt;Título com &lt;em class="gold"&gt;ênfase&lt;/em&gt;&lt;/h2&gt;
+      &lt;p class="lead"&gt;Parágrafo de abertura.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;div class="deliverable"&gt;…&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre>
+      <p class="small muted">Alterne <code>.on-paper</code>, nada (marinho), <code>.on-navy-800</code> e <code>.on-paper-2</code>. Adicione <code>.reveal</code> nos elementos que devem surgir ao rolar.</p>
+    </div>
+  </div>
+</div></section>
+
+<footer class="section-tight"><div class="container center"><img class="seal" src="assets/seal.svg" alt="" width="90" height="90" style="width:90px;height:90px;margin:0 auto"></div></footer>
+</body>
+</html>
