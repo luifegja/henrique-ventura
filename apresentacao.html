@@ -9,199 +9,231 @@
   html, body { height: 100%; overflow: hidden; }
   body { background: var(--navy-950); }
 
-  /* ---- Palco 1600×900 escalado ---- */
-  #viewport { position: fixed; inset: 0; display: grid; place-items: center; }
-  #stage { width: 1600px; height: 900px; position: relative; transform-origin: center center; }
-
-  /* Cada slide: cabeçalho (56–120px), área útil (150–790px), rodapé (~850px) */
+  /* ============================================================
+     Palco: ocupa a janela inteira. Cada slide é um container e
+     --u é a unidade de escala (16px em 1600×900), presa à dimensão
+     limitante da janela: nunca estoura na vertical.
+     ============================================================ */
+  #stage { position: fixed; inset: 0; }
   .slide {
     position: absolute; inset: 0;
-    padding: 150px 110px 110px;
-    display: flex; flex-direction: column; justify-content: center;
-    opacity: 0; visibility: hidden; transform: translateX(32px); content-visibility: hidden;
-    transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out), visibility 0s 500ms;
-    background: var(--navy-900); overflow: hidden;
+    container-type: size;
+    --u: min(1cqw, 1.7778cqh);
+    display: flex; flex-direction: column;
+    padding: 5cqh 6.5cqw 4cqh;
+    background: var(--navy-900); color: var(--paper);
+    overflow: hidden;
+    opacity: 0; transform: scale(1.012); visibility: hidden; content-visibility: hidden;
   }
+  @supports not (width: 1cqw) { .slide { --u: 16px; } }
+  .slide.active { opacity: 1; transform: none; visibility: visible; content-visibility: visible; z-index: 2; transition: opacity 480ms var(--ease-out), transform 640ms var(--ease-out); }
+  .slide.leaving { opacity: 1; transform: scale(0.985); visibility: visible; content-visibility: visible; z-index: 1; transition: transform 640ms var(--ease-out); }
   .slide.paper { background: var(--paper); color: var(--ink); }
-  .slide.active { opacity: 1; visibility: visible; transform: none; content-visibility: visible; transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out), visibility 0s; }
-  .slide.prev { transform: translateX(-32px); }
-  .slide.active::after {
-    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  }
-  /* Fios de grade nas margens */
+
+  #grain { position: fixed; inset: 0; z-index: 5; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
   .gridlines { position: absolute; inset: 0; pointer-events: none; }
-  .gridlines::before, .gridlines::after { content: ""; position: absolute; top: 120px; bottom: 80px; width: 1px; background: var(--hair); }
-  .gridlines::before { left: 70px; } .gridlines::after { right: 70px; }
+  .gridlines::before, .gridlines::after { content: ""; position: absolute; top: 5cqh; bottom: 4cqh; width: 1px; background: var(--hair); }
+  .gridlines::before { left: 4cqw; } .gridlines::after { right: 4cqw; }
   .paper .gridlines::before, .paper .gridlines::after { background: var(--hair-ink); }
 
-  .sl-head { position: absolute; top: 56px; left: 110px; right: 110px; display: flex; justify-content: space-between; align-items: center; z-index: 2; padding-bottom: 18px; border-bottom: 1px solid var(--hair); }
+  /* ---- Zonas em fluxo ---- */
+  .sl-head { flex: none; display: flex; justify-content: space-between; align-items: center; padding-bottom: 2cqh; border-bottom: 1px solid var(--hair); position: relative; z-index: 2; }
   .paper .sl-head { border-color: var(--hair-ink); }
-  .sl-head .brand .word { font-size: 1.6rem; }
-  .sl-head .brand .sub { font-size: 0.46rem; }
-  .sl-head .plan-tag { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); }
+  .sl-head .brand .word { font-size: calc(1.6 * var(--u)); }
+  .sl-head .brand .sub { font-size: calc(0.46 * var(--u)); }
+  .sl-head .plan-tag { font-family: var(--font-mono); font-size: calc(0.64 * var(--u)); letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); }
   .paper .brand .word { color: var(--navy-800); } .paper .brand .sub { color: var(--gold-600); } .paper .sl-head .plan-tag { color: var(--gold-600); }
-  .paper .eyebrow { color: var(--gold-600); } .paper .eyebrow::before { background: var(--gold-600); }
-  .sl-foot { position: absolute; bottom: 48px; left: 110px; right: 110px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mist-2); z-index: 2; }
+
+  .sl-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; margin: 4cqh 0 3cqh; position: relative; z-index: 2; overflow: hidden; }
+  .sl-title { flex: none; display: grid; gap: calc(0.6 * var(--u)); margin-bottom: calc(2.2 * var(--u)); }
+  .sl-title h2 { font-size: calc(2.9 * var(--u)); max-width: 24ch; text-wrap: balance; }
+  .sl-main { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+
+  .sl-foot { flex: none; display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: calc(1.5 * var(--u)); height: 3cqh; font-family: var(--font-mono); font-size: calc(0.62 * var(--u)); letter-spacing: 0.22em; text-transform: uppercase; color: var(--mist-2); position: relative; z-index: 2; }
   .paper .sl-foot { color: var(--ink-3); }
-  .sl-foot .pg { color: var(--gold-400); }
+  .sl-foot .pg b { color: var(--gold-400); font-weight: 500; }
+  .sl-foot .dots { display: flex; gap: calc(0.45 * var(--u)); justify-self: center; }
+  .sl-foot .dots i { display: block; width: calc(0.45 * var(--u)); height: calc(0.45 * var(--u)); background: var(--hair-gold); transition: background 300ms; }
+  .sl-foot .dots i.on { background: var(--gold-400); }
+  .sl-foot .hud { display: flex; gap: calc(0.5 * var(--u)); opacity: 0; transition: opacity 300ms; }
+  body.hud-on .sl-foot .hud { opacity: 1; }
+  .sl-foot .hud button { background: transparent; border: 1px solid var(--hair-gold); color: inherit; font: inherit; letter-spacing: 0.1em; padding: calc(0.25 * var(--u)) calc(0.6 * var(--u)); cursor: pointer; }
+  .sl-foot .hud button:hover { border-color: var(--gold-400); color: var(--gold-400); }
+  #progress { position: fixed; left: 0; bottom: 0; height: 2px; background: var(--gold-500); width: 0; transition: width 400ms var(--ease-out); z-index: 6; }
 
-  .a { opacity: 0; transform: translateY(14px); animation: aIn 700ms var(--ease-out) forwards; }
-  .a:nth-child(1) { animation-delay: 40ms; } .a:nth-child(2) { animation-delay: 140ms; } .a:nth-child(3) { animation-delay: 240ms; }
-  .a:nth-child(4) { animation-delay: 340ms; } .a:nth-child(5) { animation-delay: 440ms; } .a:nth-child(6) { animation-delay: 540ms; }
-  .a:nth-child(7) { animation-delay: 640ms; } .a:nth-child(8) { animation-delay: 740ms; }
-  @keyframes aIn { to { opacity: 1; transform: none; } }
+  /* ---- Tipografia em --u (sobrescreve os rem do esl.css dentro do slide) ---- */
+  .slide .eyebrow { font-size: calc(0.68 * var(--u)); gap: calc(0.75 * var(--u)); }
+  .slide .eyebrow::before { width: calc(1.4 * var(--u)); }
+  .paper .eyebrow { color: var(--gold-600); } .paper .eyebrow::before { background: var(--gold-600); }
+  .slide .lead { font-size: calc(1.2 * var(--u)); max-width: 62ch; }
+  .slide p { font-size: calc(1.05 * var(--u)); }
+  .slide .small { font-size: calc(0.85 * var(--u)); }
+  .slide .pill { font-size: calc(0.62 * var(--u)); padding: calc(0.3 * var(--u)) calc(0.6 * var(--u)); }
+  .slide .stat { gap: calc(0.4 * var(--u)); padding-top: calc(0.7 * var(--u)); }
+  .slide .stat .n { font-size: calc(2.6 * var(--u)); }
+  .slide .stat .l { font-size: calc(0.68 * var(--u)); }
+  .slide em.gold { color: var(--gold-400); }
+  .paper em.gold { color: var(--gold-700); }
 
-  .sl-title { display: grid; gap: 10px; margin-bottom: 36px; }
-  .sl-title h2 { font-size: 2.9rem; max-width: 24ch; }
+  /* ---- Entradas: automáticas (.auto) e por etapa (.frag) ---- */
+  .auto { opacity: 0; }
+  .slide:is(.active, .leaving) .auto { animation: aIn 700ms var(--ease-out) forwards; animation-delay: calc(60ms + var(--i, 0) * 90ms); }
+  .slide.noauto .auto { animation: none; opacity: 1; }
+  @keyframes aIn { from { opacity: 0; transform: translateY(1.4cqh); } to { opacity: 1; transform: none; } }
+  .frag { opacity: 0; transform: translateY(1.5cqh); transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out); }
+  .frag.on { opacity: 1; transform: none; }
+  .slide.instant .frag { transition: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .slide.active, .slide.leaving, .frag { transition: none; }
+    .slide:is(.active, .leaving) .auto { animation: none; opacity: 1; }
+  }
 
-  /* Capa */
-  .cover { padding: 110px; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 80px; align-items: center; }
-  .cover .giant { font-size: 11rem; line-height: 0.85; color: var(--champagne); letter-spacing: -0.02em; font-weight: 500; }
-  .cover .sub { font-family: var(--font-mono); letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold-400); font-size: 0.8rem; margin-top: 22px; }
-  .cover .plan-name { font-family: var(--font-display); font-size: 2.2rem; font-weight: 400; font-style: italic; margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--hair-gold); max-width: 20ch; }
-  .cover .photo-slot { aspect-ratio: 4/5; height: 640px; width: auto; justify-self: end; }
-  .cover .for { margin-top: 22px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mist-2); }
+  /* ---- Capa ---- */
+  .cover .sl-body { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 5cqw; align-items: center; margin-top: 2cqh; }
+  .cover .giant { font-size: calc(11 * var(--u)); line-height: 0.85; color: var(--champagne); letter-spacing: -0.02em; font-weight: 500; }
+  .cover .sub { font-family: var(--font-mono); letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold-400); font-size: calc(0.8 * var(--u)); margin-top: calc(1.4 * var(--u)); }
+  .cover .plan-name { font-family: var(--font-display); font-size: calc(2.2 * var(--u)); font-weight: 400; font-style: italic; margin-top: calc(2.6 * var(--u)); padding-top: calc(1.5 * var(--u)); border-top: 1px solid var(--hair-gold); max-width: 20ch; }
+  .cover .photo-slot { height: 62cqh; aspect-ratio: 4 / 5; width: auto; justify-self: end; }
+  .cover .for { margin-top: calc(1.4 * var(--u)); font-family: var(--font-mono); font-size: calc(0.7 * var(--u)); letter-spacing: 0.22em; text-transform: uppercase; color: var(--mist-2); }
   .cover .for b { color: var(--champagne); font-weight: 500; }
 
-  /* Afirmação grande */
-  .statement { text-align: center; }
-  .statement .big { font-family: var(--font-display); font-size: 4.6rem; line-height: 1.08; font-weight: 500; max-width: 22ch; margin: 24px auto 0; font-variation-settings: "opsz" 96; }
+  /* ---- Afirmação ---- */
+  .statement .sl-body { text-align: center; align-items: center; }
+  .statement .big { font-family: var(--font-display); font-size: calc(4.6 * var(--u)); line-height: 1.08; font-weight: 500; max-width: 22ch; margin: calc(1.5 * var(--u)) auto 0; text-wrap: balance; }
   .statement .big em { color: var(--gold-400); font-style: italic; font-weight: 400; }
-  .paper .statement .big em, .slide.paper em.gold { color: var(--gold-600); }
-  .statement .after { margin: 34px auto 0; font-size: 1.2rem; color: var(--mist); max-width: 62ch; }
-  .paper .statement .after { color: var(--ink-2); }
+  .paper .statement .big em, .statement.paper .big em { color: var(--gold-700); }
+  .statement .after { margin: calc(2.2 * var(--u)) auto 0; font-size: calc(1.2 * var(--u)); color: var(--mist); max-width: 62ch; }
+  .paper .after { color: var(--ink-2); }
 
-  /* Espelho */
-  .mirror-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 70px; margin-top: 10px; }
-  .mirror-grid .m { position: relative; font-family: var(--font-display); font-style: italic; font-size: 1.75rem; line-height: 1.22; padding: 26px 0 26px 48px; border-top: 1px solid var(--hair-ink); }
-  .mirror-grid .m::before { content: "\201C"; position: absolute; left: 0; top: 14px; font-size: 3.4rem; line-height: 1; color: var(--gold-600); font-style: normal; }
+  /* ---- Espelho ---- */
+  .mirror-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4cqw; }
+  .mirror-grid .m { position: relative; font-family: var(--font-display); font-style: italic; font-weight: 500; font-variation-settings: "opsz" 18; font-size: calc(1.75 * var(--u)); line-height: 1.22; padding: calc(1.6 * var(--u)) 0 calc(1.6 * var(--u)) calc(3 * var(--u)); border-top: 1px solid var(--hair-ink); }
+  .mirror-grid .m::before { content: "\201C"; position: absolute; left: 0; top: calc(0.9 * var(--u)); font-size: calc(3.4 * var(--u)); line-height: 1; color: var(--gold-600); font-style: normal; }
 
-  /* ESL letras */
+  /* ---- Método ESL ---- */
   .esl3 { display: grid; grid-template-columns: repeat(3, 1fr); }
-  .esl3 .col { padding: 26px 34px 0 0; border-top: 1px solid var(--hair-gold); }
-  .esl3 .col + .col { border-left: 1px solid var(--hair); padding-left: 34px; }
-  .esl3 .L { font-family: var(--font-display); font-size: 8.5rem; line-height: 0.8; font-weight: 500; color: var(--gold-400); letter-spacing: -0.02em; font-variation-settings: "opsz" 96; }
-  .esl3 .t { font-family: var(--font-display); font-size: 1.85rem; font-weight: 500; margin-top: 22px; line-height: 1.1; }
+  .esl3 .col { padding: calc(1.6 * var(--u)) calc(2 * var(--u)) 0 0; border-top: 1px solid var(--hair-gold); }
+  .esl3 .col + .col { border-left: 1px solid var(--hair); padding-left: calc(2 * var(--u)); }
+  .esl3 .L { font-family: var(--font-display); font-size: calc(8.5 * var(--u)); line-height: 0.8; font-weight: 500; color: var(--gold-400); letter-spacing: -0.02em; font-variation-settings: "opsz" 96; }
+  .esl3 .t { font-family: var(--font-display); font-size: calc(1.85 * var(--u)); font-weight: 600; margin-top: calc(1.4 * var(--u)); line-height: 1.1; }
   .esl3 .t em { color: var(--gold-400); font-style: italic; font-weight: 400; }
-  .esl3 p { color: var(--mist); font-size: 1rem; margin-top: 12px; max-width: 34ch; }
+  .esl3 p { color: var(--mist); font-size: calc(1 * var(--u)); margin-top: calc(0.8 * var(--u)); max-width: 34ch; }
 
-  /* Linha do tempo */
-  .timeline { margin-top: 10px; }
+  /* ---- Linha do tempo ---- */
   .timeline .bar { height: 1px; background: var(--hair-gold); }
-  .timeline .phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 34px; }
+  .timeline .phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(2.5 * var(--u)); margin-top: calc(2.2 * var(--u)); }
   .timeline .ph { position: relative; }
-  .timeline .ph::before { content: ""; position: absolute; top: -40px; left: 0; width: 10px; height: 10px; background: var(--gold-500); }
-  .timeline .ph .k { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); }
-  .timeline .ph .t { font-family: var(--font-display); font-size: 1.9rem; font-weight: 500; margin-top: 10px; line-height: 1.1; }
-  .timeline .ph p { color: var(--mist); font-size: 1rem; margin-top: 10px; max-width: 36ch; }
+  .timeline .ph::before { content: ""; position: absolute; top: calc(-2.6 * var(--u)); left: 0; width: calc(0.6 * var(--u)); height: calc(0.6 * var(--u)); background: var(--gold-500); }
+  .timeline .ph .k { font-family: var(--font-mono); font-size: calc(0.64 * var(--u)); letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); }
+  .timeline .ph .t { font-family: var(--font-display); font-size: calc(1.9 * var(--u)); font-weight: 600; margin-top: calc(0.6 * var(--u)); line-height: 1.1; }
+  .timeline .ph p { color: var(--mist); font-size: calc(1 * var(--u)); margin-top: calc(0.6 * var(--u)); max-width: 36ch; }
 
-  /* Caso (barras) */
-  .case { display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; }
-  .bars { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: end; height: 420px; border-bottom: 1px solid var(--hair-gold); }
-  .bar-col { display: grid; align-content: end; gap: 12px; height: 100%; }
-  .bar-col .b { border: 1px solid var(--hair-gold); display: grid; align-content: start; padding: 20px; transform-origin: bottom; animation: grow 900ms var(--ease-out) forwards; transform: scaleY(0); background: rgba(244,238,226,0.03); }
-  .bar-col.hi .b { background: var(--gold-500); border-color: var(--gold-500); color: var(--navy-950); animation-delay: 300ms; }
-  .bar-col .n { font-family: var(--font-display); font-size: 2.4rem; font-weight: 500; line-height: 1; }
-  .bar-col .l { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.8; margin-top: 8px; }
-  .bar-col .cap { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist-2); padding-top: 14px; }
-  @keyframes grow { to { transform: scaleY(1); } }
-  .case ul { list-style: none; padding: 0; margin: 26px 0 0; }
-  .case li { display: grid; grid-template-columns: 28px 1fr; gap: 14px; color: var(--mist); font-size: 1.05rem; padding: 12px 0; border-top: 1px solid var(--hair); }
+  /* ---- Caso ---- */
+  .case { display: grid; grid-template-columns: 1fr 1fr; gap: 5cqw; align-items: stretch; height: 100%; min-height: 0; }
+  .case .txt { display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+  .case h2 { font-size: calc(2.9 * var(--u)); max-width: 16ch; margin-top: calc(0.8 * var(--u)); text-wrap: balance; }
+  .case ul { list-style: none; padding: 0; margin: calc(1.6 * var(--u)) 0 0; }
+  .case li { display: grid; grid-template-columns: calc(1.8 * var(--u)) 1fr; gap: calc(0.9 * var(--u)); color: var(--mist); font-size: calc(1.05 * var(--u)); padding: calc(0.75 * var(--u)) 0; border-top: 1px solid var(--hair); }
   .case li::before { content: "\2192"; color: var(--gold-400); font-family: var(--font-mono); }
+  .bars { display: grid; grid-template-columns: 1fr 1fr; gap: calc(2.2 * var(--u)); align-items: end; height: 100%; min-height: 0; border-bottom: 1px solid var(--hair-gold); }
+  .bar-col { display: grid; grid-template-rows: minmax(0, 1fr) auto; align-items: end; gap: calc(0.75 * var(--u)); height: 100%; min-height: 0; }
+  .bar-col .b { border: 1px solid var(--hair-gold); display: grid; align-content: start; padding: calc(1.25 * var(--u)); background: rgba(244,238,226,0.03); min-height: 0; align-self: end; }
+  .bar-col.hi .b { background: var(--gold-500); border-color: var(--gold-500); color: var(--navy-950); }
+  .bar-col .n { font-family: var(--font-display); font-size: calc(2.4 * var(--u)); font-weight: 600; line-height: 1; }
+  .bar-col .l { font-family: var(--font-mono); font-size: calc(0.62 * var(--u)); letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.8; margin-top: calc(0.5 * var(--u)); }
+  .bar-col .cap { font-family: var(--font-mono); font-size: calc(0.66 * var(--u)); letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist-2); padding-top: calc(0.9 * var(--u)); }
+  .bar-col.frag { transform: none; transition: opacity 600ms var(--ease-out); }
+  .bar-col.frag .b { transform: scaleY(0); transform-origin: bottom; transition: transform 800ms var(--ease-out); }
+  .bar-col.frag.on .b { transform: none; }
 
-  /* Cards acumulando: altura fixa, nunca encosta no rodapé */
-  .cards { display: grid; gap: 18px; grid-template-columns: repeat(var(--cols, 4), 1fr); align-items: stretch; }
-  .dcard { position: relative; border: 1px solid var(--hair); padding: 56px 22px 22px; height: 300px; display: grid; align-content: end; gap: 10px; opacity: 0; transform: translateY(14px); animation: aIn 700ms var(--ease-out) forwards; }
-  .dcard:nth-child(1) { animation-delay: 60ms; } .dcard:nth-child(2) { animation-delay: 140ms; } .dcard:nth-child(3) { animation-delay: 220ms; }
-  .dcard:nth-child(4) { animation-delay: 300ms; } .dcard:nth-child(5) { animation-delay: 380ms; } .dcard:nth-child(6) { animation-delay: 460ms; }
-  .dcard.new { border-color: var(--gold-500); }
-  .dcard.new::before { content: ""; position: absolute; left: -1px; right: -1px; top: -1px; height: 3px; background: var(--gold-500); }
-  .dcard .idx { position: absolute; top: 18px; left: 22px; font-family: var(--font-display); font-size: 1.5rem; color: var(--gold-400); line-height: 1; }
-  .dcard .t { font-family: var(--font-display); font-size: 1.4rem; font-weight: 500; line-height: 1.12; }
-  .dcard .d { font-size: 0.84rem; color: var(--mist-2); line-height: 1.4; }
-  .dcard .v { position: absolute; top: 16px; right: 18px; }
-
-  .stackall .cards { --cols: 5; gap: 12px; }
-  .stackall .dcard { height: 140px; padding: 44px 16px 14px; }
-  .stackall .dcard .idx { font-size: 1.1rem; top: 14px; left: 16px; }
-  .stackall .dcard .t { font-size: 1rem; }
+  /* ---- Cards (etapas) ---- */
+  .cards { display: grid; gap: calc(1.1 * var(--u)); grid-template-columns: repeat(var(--cols, 4), 1fr); grid-auto-rows: minmax(0, 1fr); height: 100%; max-height: 48cqh; min-height: 0; }
+  .dcard { position: relative; border: 1px solid var(--hair); padding: calc(1.4 * var(--u)); min-height: 0; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; gap: calc(0.6 * var(--u)); }
+  .dcard::before { content: ""; position: absolute; left: -1px; right: -1px; top: -1px; height: 3px; background: var(--gold-500); opacity: 0; transition: opacity 400ms; }
+  .dcard.cur { border-color: var(--gold-500); }
+  .dcard.cur::before { opacity: 1; }
+  .dcard .idx { font-family: var(--font-display); font-size: calc(1.5 * var(--u)); color: var(--gold-400); line-height: 1; display: flex; justify-content: space-between; align-items: start; }
+  .dcard .t { font-family: var(--font-display); font-size: calc(1.4 * var(--u)); font-weight: 600; line-height: 1.12; align-self: end; }
+  .dcard .d { font-size: calc(0.85 * var(--u)); color: var(--mist-2); line-height: 1.4; }
+  .stackall .cards { --cols: 5; gap: calc(0.75 * var(--u)); max-height: none; height: auto; flex: 1 1 auto; }
+  .stackall .sl-title { margin-bottom: calc(1.4 * var(--u)); }
+  .stackall .total-line, .sl-main + .total-line { margin-top: calc(1 * var(--u)); padding-top: calc(0.8 * var(--u)); }
+  .stackall .dcard { padding: calc(0.9 * var(--u)) calc(1 * var(--u)); gap: calc(0.3 * var(--u)); }
+  .stackall .dcard .idx { font-size: calc(1 * var(--u)); }
+  .stackall .dcard .t { font-size: calc(1 * var(--u)); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .stackall .dcard .d { display: none; }
-  .stackall .dcard .v { top: 12px; right: 12px; }
-  .total-line { display: flex; align-items: baseline; justify-content: space-between; border-top: 1px solid var(--hair-gold); padding-top: 18px; margin-top: 24px; }
-  .total-line .l { font-family: var(--font-mono); letter-spacing: 0.26em; text-transform: uppercase; color: var(--mist-2); font-size: 0.72rem; }
-  .total-line .n { font-family: var(--font-display); font-size: 3.6rem; font-weight: 500; color: var(--champagne); line-height: 1; }
-  .total-line .n.strike { text-decoration: line-through; text-decoration-color: var(--signal); text-decoration-thickness: 3px; color: var(--mist-2); font-size: 2.2rem; }
+  .total-line { flex: none; display: flex; align-items: baseline; justify-content: space-between; border-top: 1px solid var(--hair-gold); padding-top: calc(1.1 * var(--u)); margin-top: calc(1.5 * var(--u)); }
+  .total-line .l { font-family: var(--font-mono); letter-spacing: 0.26em; text-transform: uppercase; color: var(--mist-2); font-size: calc(0.72 * var(--u)); }
+  .total-line .n { font-family: var(--font-display); font-size: calc(3.6 * var(--u)); font-weight: 500; color: var(--champagne); line-height: 1; }
+  .total-line .n.strike { text-decoration: line-through; text-decoration-color: var(--signal); text-decoration-thickness: 3px; color: var(--mist-2); font-size: calc(2.2 * var(--u)); }
 
-  .bonus-title { text-align: center; }
-  .bonus-title .giant { font-size: 6.5rem; color: var(--gold-400); font-style: italic; font-weight: 400; }
-
-  /* Preço */
-  .price-slide { display: grid; grid-template-columns: 1fr 1.05fr; gap: 90px; align-items: center; }
-  .price-slide .giant { font-size: 8.5rem; line-height: 0.9; color: var(--champagne); letter-spacing: -0.02em; font-weight: 500; }
-  .price-slide .giant small { font-size: 0.34em; vertical-align: top; line-height: 1.9; margin-right: 8px; color: var(--gold-400); font-weight: 400; }
+  /* ---- Preço ---- */
+  .price { display: grid; grid-template-columns: 1fr 1.05fr; gap: 5cqw; align-items: center; }
+  .price .giant { font-size: calc(8.5 * var(--u)); line-height: 0.9; color: var(--champagne); letter-spacing: -0.02em; font-weight: 500; }
+  .price .giant small { font-size: 0.34em; vertical-align: top; line-height: 1.9; margin-right: calc(0.5 * var(--u)); color: var(--gold-400); font-weight: 400; }
   .opts { display: grid; border-top: 1px solid var(--hair-gold); }
-  .opt { border-bottom: 1px solid var(--hair); padding: 24px 0; display: grid; grid-template-columns: 230px 1fr; gap: 28px; align-items: center; }
-  .opt .k { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); }
-  .opt .n { font-family: var(--font-display); font-size: 2.1rem; font-weight: 500; line-height: 1; color: var(--champagne); margin-top: 6px; }
-  .opt .s { font-size: 0.95rem; color: var(--mist); }
-  .opt.best { background: var(--gold-500); padding: 24px; margin-top: 12px; border: 0; }
+  .opt { border-bottom: 1px solid var(--hair); padding: calc(1.5 * var(--u)) 0; display: grid; grid-template-columns: calc(14 * var(--u)) 1fr; gap: calc(1.75 * var(--u)); align-items: center; }
+  .opt .k { font-family: var(--font-mono); font-size: calc(0.64 * var(--u)); letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); }
+  .opt .n { font-family: var(--font-display); font-size: calc(2.1 * var(--u)); font-weight: 600; line-height: 1; color: var(--champagne); margin-top: calc(0.4 * var(--u)); }
+  .opt .s { font-size: calc(0.95 * var(--u)); color: var(--mist); }
+  .opt.best { background: var(--gold-500); padding: calc(1.5 * var(--u)); margin-top: calc(0.75 * var(--u)); border: 0; }
   .opt.best .k, .opt.best .n, .opt.best .s { color: var(--navy-950); }
 
-  /* Soma */
-  .sum { display: grid; grid-template-columns: 1fr auto 1fr auto 1.2fr; align-items: center; gap: 26px; text-align: center; margin-top: 30px; }
-  .sum .n { font-family: var(--font-display); font-size: 3.8rem; font-weight: 500; color: var(--champagne); line-height: 1; }
-  .sum .l { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--mist-2); margin-top: 12px; }
-  .sum .op { font-family: var(--font-display); font-size: 3.4rem; color: var(--gold-400); font-weight: 400; }
-  .sum .res .n { font-size: 5rem; color: var(--gold-400); }
+  /* ---- Soma ---- */
+  .sum { display: grid; grid-template-columns: 1fr auto 1fr auto 1.2fr; align-items: center; gap: calc(1.6 * var(--u)); text-align: center; margin-top: calc(1.8 * var(--u)); }
+  .sum .n { font-family: var(--font-display); font-size: calc(3.8 * var(--u)); font-weight: 500; color: var(--champagne); line-height: 1; }
+  .sum .l { font-family: var(--font-mono); font-size: calc(0.64 * var(--u)); letter-spacing: 0.24em; text-transform: uppercase; color: var(--mist-2); margin-top: calc(0.75 * var(--u)); }
+  .sum .op { font-family: var(--font-display); font-size: calc(3.4 * var(--u)); color: var(--gold-400); font-weight: 400; }
+  .sum .res .n { font-size: calc(5 * var(--u)); color: var(--gold-400); }
+  .conta .sl-body { text-align: center; align-items: center; }
 
-  /* Comparação */
-  .vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 50px; align-items: stretch; }
-  .vs .side { border-top: 1px solid var(--hair); padding-top: 28px; display: grid; gap: 14px; align-content: start; }
+  /* ---- Comparação ---- */
+  .vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: calc(3 * var(--u)); align-items: stretch; }
+  .vs .side { border-top: 1px solid var(--hair); padding-top: calc(1.75 * var(--u)); display: grid; gap: calc(0.9 * var(--u)); align-content: start; }
   .vs .side.good { border-top: 3px solid var(--gold-500); }
-  .vs .side .k { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); }
-  .vs .side .n { font-family: var(--font-display); font-size: 3.4rem; font-weight: 500; line-height: 1; color: var(--champagne); }
-  .vs .side p { color: var(--mist); font-size: 1.02rem; max-width: 44ch; }
-  .vs .mid { align-self: center; font-family: var(--font-display); font-style: italic; font-size: 2.2rem; color: var(--gold-400); }
+  .vs .side .k { font-family: var(--font-mono); font-size: calc(0.64 * var(--u)); letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); }
+  .vs .side .n { font-family: var(--font-display); font-size: calc(3.4 * var(--u)); font-weight: 500; line-height: 1; color: var(--champagne); }
+  .vs .side .n span { font-size: calc(1.2 * var(--u)); }
+  .vs .side p { color: var(--mist); font-size: calc(1.02 * var(--u)); max-width: 44ch; }
+  .vs .mid { align-self: center; font-family: var(--font-display); font-style: italic; font-size: calc(2.2 * var(--u)); color: var(--gold-400); }
 
-  /* Para quem é */
-  .who { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; }
+  /* ---- Para quem é ---- */
+  .who { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5cqw; }
   .who ul { list-style: none; padding: 0; margin: 0; }
-  .who li { display: grid; grid-template-columns: 32px 1fr; gap: 14px; font-size: 1.2rem; line-height: 1.35; padding: 14px 0; border-top: 1px solid var(--hair-ink); }
+  .who li { display: grid; grid-template-columns: calc(2 * var(--u)) 1fr; gap: calc(0.9 * var(--u)); font-size: calc(1.2 * var(--u)); line-height: 1.35; padding: calc(0.9 * var(--u)) 0; border-top: 1px solid var(--hair-ink); }
   .who li::before { font-family: var(--font-mono); color: var(--gold-600); }
   .who .yes li::before { content: "\2713"; }
   .who .no li::before { content: "\2715"; color: var(--signal); }
-  .who h3 { font-size: 0.7rem; font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: 14px; }
+  .who h3 { font-size: calc(0.7 * var(--u)); font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: calc(0.9 * var(--u)); }
   .who .yes h3 { color: var(--gold-600); } .who .no h3 { color: var(--signal); }
 
-  /* Fechamento */
-  .closing { text-align: center; }
-  .closing h2 { font-size: 3.8rem; max-width: 22ch; margin: 18px auto 0; }
-  .closing .steps { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 56px; text-align: left; }
-  .closing .step { border-top: 1px solid var(--hair-gold); padding: 20px 30px 0 0; }
-  .closing .step + .step { border-left: 1px solid var(--hair); padding-left: 30px; }
-  .closing .step b { font-family: var(--font-display); font-weight: 500; font-size: 1.5rem; color: var(--gold-400); display: block; margin-bottom: 10px; line-height: 1; }
-  .closing .step .t { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; }
+  /* ---- Fechamento ---- */
+  .closing .sl-body { text-align: center; align-items: center; }
+  .closing h2 { font-size: calc(3.8 * var(--u)); max-width: 22ch; margin: calc(1.1 * var(--u)) auto 0; text-wrap: balance; }
+  .closing .steps { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: calc(3.5 * var(--u)); text-align: left; width: 100%; }
+  .closing .step { border-top: 1px solid var(--hair-gold); padding: calc(1.25 * var(--u)) calc(1.9 * var(--u)) 0 0; }
+  .closing .step + .step { border-left: 1px solid var(--hair); padding-left: calc(1.9 * var(--u)); }
+  .closing .step b { font-family: var(--font-display); font-weight: 500; font-size: calc(1.5 * var(--u)); color: var(--gold-400); display: block; margin-bottom: calc(0.6 * var(--u)); line-height: 1; }
+  .closing .step .t { font-family: var(--font-display); font-size: calc(1.5 * var(--u)); font-weight: 600; }
 
-  /* Foto + texto */
-  .photo-text { display: grid; grid-template-columns: 0.78fr 1.22fr; gap: 90px; align-items: center; }
-  .photo-text .photo-slot { aspect-ratio: 4/5; height: 600px; width: auto; justify-self: center; }
-  .photo-text h2 { font-size: 3rem; max-width: 20ch; }
-  .photo-text .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 34px; }
-  .photo-wide { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 90px; align-items: center; }
-  .photo-wide .photo-slot { aspect-ratio: 16/10; width: 100%; }
-  .photo-wide h2 { font-size: 3rem; }
+  /* ---- Foto + texto ---- */
+  .photo-text { display: grid; grid-template-columns: auto 1fr; gap: 5cqw; align-items: center; }
+  .photo-text .photo-slot { height: 60cqh; aspect-ratio: 4 / 5; width: auto; }
+  .photo-text h2 { font-size: calc(3 * var(--u)); max-width: 20ch; margin-top: calc(0.9 * var(--u)); text-wrap: balance; }
+  .photo-text .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(1.75 * var(--u)); margin-top: calc(2.1 * var(--u)); }
+  .photo-wide { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 5cqw; align-items: center; }
+  .photo-wide .photo-slot { aspect-ratio: 16 / 10; width: 100%; max-height: 60cqh; }
+  .photo-wide h2 { font-size: calc(3 * var(--u)); text-wrap: balance; margin-top: calc(0.9 * var(--u)); }
+  .slide .photo-slot .mark { font-size: calc(10 * var(--u)); }
+  .slide .photo-slot .cap { font-size: calc(0.62 * var(--u)); }
+  .slide .photo-slot.framed { outline-offset: calc(0.75 * var(--u)); }
 
-  /* ---- Controles ---- */
-  #progress { position: fixed; left: 0; bottom: 0; height: 2px; background: var(--gold-500); width: 0; transition: width 400ms var(--ease-out); z-index: 20; }
-  #hud { position: fixed; right: 18px; bottom: 14px; z-index: 20; display: flex; gap: 10px; align-items: center; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.15em; color: var(--mist-2); opacity: 0.7; }
-  #hud button { background: transparent; border: 1px solid var(--hair); color: var(--mist); padding: 6px 10px; cursor: pointer; font: inherit; }
-  #hud button:hover { border-color: var(--gold-500); color: var(--gold-400); }
+  /* ---- Overlays (fora do #stage) ---- */
   #help { position: fixed; inset: 0; z-index: 30; display: none; place-items: center; background: rgba(4,8,18,0.92); }
   #help.show { display: grid; }
-  #help .box { max-width: 560px; padding: 32px; border: 1px solid var(--hair-gold); background: var(--navy-900); }
+  #help .box { max-width: 600px; padding: 32px; border: 1px solid var(--hair-gold); background: var(--navy-900); }
   #help kbd { font-family: var(--font-mono); background: rgba(244,238,226,0.08); padding: 2px 8px; border: 1px solid var(--hair); }
-
   #chooser { position: fixed; inset: 0; display: none; place-items: center; z-index: 40; background: var(--navy-950); overflow: auto; }
   #chooser.show { display: grid; }
   #chooser .box { width: min(960px, 92vw); padding: 40px 0; }
@@ -211,14 +243,17 @@
   #chooser a.card:hover { background: rgba(244,238,226,0.03); }
   #chooser .form { margin-top: 28px; max-width: 520px; }
 
+  /* ---- Impressão: 1600×900 fixos, tudo revelado ---- */
   @media print {
     @page { size: 1600px 900px; margin: 0; }
     html, body { overflow: visible; height: auto; background: var(--navy-950); }
-    #viewport { position: static; display: block; }
-    #stage { width: 1600px; height: auto; transform: none !important; }
-    .slide { position: relative; width: 1600px; height: 900px; opacity: 1 !important; visibility: visible !important; transform: none !important; content-visibility: visible; break-after: page; page-break-after: always; }
-    .a, .dcard, .bar-col .b { animation: none; opacity: 1; transform: none; }
-    #progress, #hud, #help, #chooser { display: none !important; }
+    #stage { position: static; }
+    .slide { position: relative; width: 1600px; height: 900px; opacity: 1 !important; transform: none !important; visibility: visible !important; content-visibility: visible !important; break-after: page; page-break-after: always; --u: 16px; }
+    .slide:last-child { break-after: auto; page-break-after: auto; }
+    .frag, .auto { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important; }
+    .bar-col.frag .b { transform: none !important; }
+    .dcard::before { display: none; }
+    .sl-foot .dots, .sl-foot .hud, #grain, #progress, #help, #chooser { display: none !important; }
   }
 </style>
 </head>
@@ -228,7 +263,7 @@
   <div class="box">
     <a class="brand" href="index.html"><span class="word">ESL</span><span class="sub">Empresa de Serviço Lucrativa</span></a>
     <h1 style="margin-top: 24px">Qual apresentação?</h1>
-    <p class="lead">Para a reunião de fechamento. Setas para avançar, <span class="mono">F</span> para tela cheia, <span class="mono">Ctrl+P</span> para salvar em PDF.</p>
+    <p class="lead">Para a reunião de fechamento. Setas revelam cada etapa; <span class="mono">F</span> para tela cheia; <span class="mono">Ctrl+P</span> salva em PDF.</p>
     <form class="form" id="chooser-form">
       <div class="field"><label for="c-nome">Nome do cliente (opcional, personaliza a capa e o caso)</label><input id="c-nome" placeholder="Ex.: Dra. Camila"></div>
       <div class="field"><label for="c-neg">Negócio dele (opcional)</label><input id="c-neg" placeholder="Ex.: clínica de dermatologia"></div>
@@ -241,19 +276,13 @@
   </div>
 </div>
 
-<div id="viewport"><div id="stage"></div></div>
+<div id="stage"></div>
+<div id="grain"></div>
 <div id="progress"></div>
-<div id="hud">
-  <span id="counter">1 / 1</span>
-  <button id="b-prev" title="Anterior (←)">←</button>
-  <button id="b-next" title="Próximo (→)">→</button>
-  <button id="b-full" title="Tela cheia (F)">⤢</button>
-  <button id="b-help" title="Ajuda (?)">?</button>
-</div>
 <div id="help"><div class="box stack">
   <h3>Atalhos</h3>
-  <p><kbd>→</kbd> <kbd>Espaço</kbd> próximo · <kbd>←</kbd> anterior · <kbd>Home</kbd>/<kbd>End</kbd> início/fim</p>
-  <p><kbd>F</kbd> tela cheia · <kbd>Ctrl+P</kbd> salvar em PDF (um slide por página) · <kbd>Esc</kbd> fecha</p>
+  <p><kbd>→</kbd> <kbd>Espaço</kbd> próxima etapa (ou próximo slide) · <kbd>←</kbd> volta uma etapa · <kbd>↓</kbd> revela tudo · <kbd>↑</kbd> esconde tudo</p>
+  <p><kbd>Shift</kbd>+<kbd>→</kbd> / <kbd>←</kbd> pula slide · <kbd>Home</kbd>/<kbd>End</kbd> início/fim · <kbd>F</kbd> tela cheia · <kbd>Ctrl+P</kbd> salvar em PDF · <kbd>Esc</kbd> fecha</p>
   <p class="muted small">Clique na metade direita avança; na esquerda, volta. Para personalizar: <span class="mono">?plano=avancada&amp;nome=Camila&amp;negocio=clínica</span></p>
 </div></div>
 
@@ -282,68 +311,68 @@
   const photo = (key, cap, cls = '') => PHOTO[key]
     ? `<div class="photo-slot framed ${cls}"><img src="${esc(PHOTO[key])}" alt="Henrique Ventura"></div>`
     : `<div class="photo-slot ${cls}"><span class="mark">HV</span><span class="cap">${esc(cap)}</span></div>`;
+  const auto = (i) => `class="auto" style="--i:${i}"`;
   const head = `<div class="gridlines"></div><div class="sl-head"><span class="brand"><span class="word">ESL</span><span class="sub">Programa de mentoria</span></span><span class="plan-tag">${esc(deck.nome)}</span></div>`;
-  const FOOT = '%%FOOT%%';
-  const card = (it, i, isNew, withV) => `
-    <div class="dcard${isNew ? ' new' : ''}">
-      <span class="idx">${String(i + 1).padStart(2, '0')}</span>
-      ${withV ? `<span class="v pill">${brl(it.v)}</span>` : ''}
+  const slide = (cls, body) => `<section class="slide ${cls}">${head}<div class="sl-body">${body}</div><div class="sl-foot"><span>@venturahenrique</span><span class="dots"></span><span class="hud"><button data-act="prev" title="Anterior">←</button><button data-act="next" title="Próximo">→</button><button data-act="full" title="Tela cheia (F)">⤢</button><button data-act="help" title="Ajuda (?)">?</button></span><span class="pg"></span></div></section>`;
+  const title = (eyebrow, h2) => `<div class="sl-title"><span class="eyebrow">${eyebrow}</span><h2>${h2}</h2></div>`;
+  const card = (it, i, { frag = false, withV = false, hi = false } = {}) => `
+    <div class="dcard${frag ? ' frag' : ''}${hi ? ' cur' : ''}"${frag ? '' : ` ${auto(i)}`}>
+      <span class="idx"><span>${String(i + 1).padStart(2, '0')}</span>${withV ? `<span class="pill">${brl(it.v)}</span>` : ''}</span>
       <div class="t">${esc(it.t)}</div>
-      ${it.d ? `<div class="d">${esc(it.d)}</div>` : ''}
+      ${it.d ? `<div class="d">${esc(it.d)}</div>` : '<span></span>'}
     </div>`;
   const S = [];
   const meses = deck.id === 'trimestral' ? 4 : 12;
 
   // 01 Capa
-  S.push(`<section class="slide cover"><div class="gridlines"></div>
+  S.push(slide('cover', `
     <div>
-      <div class="eyebrow a">Programa de mentoria · ${esc(deck.duracao)}</div>
-      <div class="giant a" style="margin-top:22px">ESL</div>
-      <div class="sub a">Empresa de Serviço Lucrativa</div>
-      <div class="plan-name a">${esc(deck.nome)}</div>
-      ${nome ? `<div class="for a">Preparado para <b>${esc(nome)}</b>${negocio ? ` · ${esc(negocio)}` : ''}</div>` : `<p class="lead a" style="margin-top:18px">${esc(deck.tagline)}</p>`}
+      <div class="eyebrow" ${auto(0)}>Programa de mentoria · ${esc(deck.duracao)}</div>
+      <div class="giant" ${auto(1)} style="--i:1;margin-top:calc(1.4*var(--u))">ESL</div>
+      <div class="sub" ${auto(2)}>Empresa de Serviço Lucrativa</div>
+      <div class="plan-name" ${auto(3)}>${esc(deck.nome)}</div>
+      ${nome ? `<div class="for" ${auto(4)}>Preparado para <b>${esc(nome)}</b>${negocio ? ` · ${esc(negocio)}` : ''}</div>` : `<p class="lead" ${auto(4)} style="margin-top:calc(1.1*var(--u))">${esc(deck.tagline)}</p>`}
     </div>
-    ${photo('capa', 'Henrique Ventura · @venturahenrique')}
-  </section>`);
+    ${photo('capa', 'Henrique Ventura · @venturahenrique')}`));
 
   // 02 Premissa
-  S.push(`<section class="slide statement paper">${head}
-    <div><div class="eyebrow a">Antes de falar do programa</div>
-    <p class="big a">Quatro lojas vendiam <em>R$ 8 milhões por ano</em> sem um CRM. E o dono fazia metade das vendas.</p>
-    <p class="after a">Eu vi isso por dentro, em 2024, mapeando empresas para virar franquia. Ninguém ali era preguiçoso. Faltava processo, e processo não se compra pronto.</p></div>${FOOT}</section>`);
+  S.push(slide('statement paper', `
+    <div class="eyebrow" ${auto(0)}>Antes de falar do programa</div>
+    <p class="big" ${auto(1)}>Quatro lojas vendiam <em>R$ 8 milhões por ano</em> sem um CRM. E o dono fazia metade das vendas.</p>
+    <p class="after frag">Eu vi isso por dentro, em 2024, mapeando empresas para virar franquia. Ninguém ali era preguiçoso. Faltava processo, e processo não se compra pronto.</p>`));
 
   // 03 Espelho
-  S.push(`<section class="slide paper">${head}
-    <div><div class="sl-title"><div class="eyebrow">O que eu ouço toda semana${nome ? ` · e talvez você, ${esc(nome)}` : ''}</div><h2>Frases de empresário bom demais na entrega para ter sobrado tempo de montar a venda.</h2></div>
-    <div class="mirror-grid">
-      <div class="m a">Não tem gente boa no mercado.</div>
-      <div class="m a">Se eu passar meus clientes grandes para o time, eles levam embora.</div>
-      <div class="m a">Eu respondo cliente às onze da noite. Isso é dedicação.</div>
-      <div class="m a">Eu sei que preciso de processo. Só não sei quem monta sem parar a empresa.</div>
-    </div></div>${FOOT}</section>`);
+  S.push(slide('paper', `
+    ${title(`O que eu ouço toda semana${nome ? ` · e talvez você, ${esc(nome)}` : ''}`, 'Frases de empresário bom demais na entrega para ter sobrado tempo de montar a venda.')}
+    <div class="sl-main"><div class="mirror-grid">
+      <div class="m frag">Não tem gente boa no mercado.</div>
+      <div class="m frag">Se eu passar meus clientes grandes para o time, eles levam embora.</div>
+      <div class="m frag">Eu respondo cliente às onze da noite. Isso é dedicação.</div>
+      <div class="m frag">Eu sei que preciso de processo. Só não sei quem monta sem parar a empresa.</div>
+    </div></div>`));
 
   // 04 Quem fala
-  S.push(`<section class="slide photo-text">${head}
+  S.push(slide('', `<div class="photo-text">
     ${photo('palestra', 'Foto palestrando · a inserir')}
     <div>
-      <div class="eyebrow a">Quem está do outro lado da mesa</div>
-      <h2 class="a" style="margin-top:14px">Não nasci vendedor. <em class="gold">Nasci tímido.</em></h2>
-      <p class="lead a" style="margin-top:18px">Garçom, atendente de call center, nove anos no marketing de relacionamento em cinco países, diretor de expansão de uma franqueadora. O mesmo processo de vendas, do produto de R$ 97 à franquia de R$ 300 mil.</p>
+      <div class="eyebrow" ${auto(0)}>Quem está do outro lado da mesa</div>
+      <h2 ${auto(1)}>Não nasci vendedor. <em class="gold">Nasci tímido.</em></h2>
+      <p class="lead" ${auto(2)} style="margin-top:calc(1.1*var(--u))">Garçom, atendente de call center, nove anos no marketing de relacionamento em cinco países, diretor de expansão de uma franqueadora. O mesmo processo de vendas, do produto de R$ 97 à franquia de R$ 300 mil.</p>
       <div class="nums">
-        <div class="stat a"><div class="n">30 mil</div><div class="l">pessoas lideradas</div></div>
-        <div class="stat a"><div class="n">22</div><div class="l">lojas abertas em 2,5 anos</div></div>
-        <div class="stat a"><div class="n">~1.000</div><div class="l">alunos no braço educacional</div></div>
+        <div class="stat frag"><div class="n">30 mil</div><div class="l">pessoas lideradas</div></div>
+        <div class="stat frag"><div class="n">22</div><div class="l">lojas abertas em 2,5 anos</div></div>
+        <div class="stat frag"><div class="n">~1.000</div><div class="l">alunos no braço educacional</div></div>
       </div>
-    </div>${FOOT}</section>`);
+    </div></div>`));
 
-  // 05 Método ESL
-  S.push(`<section class="slide">${head}
-    <div><div class="sl-title"><div class="eyebrow">O método</div><h2>Três perguntas que a sua empresa vai responder</h2></div>
-    <div class="esl3">
-      <div class="col a"><div class="L">E</div><div class="t">Esteira: <em>o que</em> você vende</div><p>Do serviço avulso ao protocolo com três níveis de preço. Produto certo vende com metade do esforço.</p></div>
-      <div class="col a"><div class="L">S</div><div class="t">Sistema: <em>como</em> você vende</div><p>Scripts de prospecção, atendimento e reunião 1x1, escritos, testados e entregues ao time.</p></div>
-      <div class="col a"><div class="L">L</div><div class="t">Liderança: <em>quem</em> vende quando você não está</div><p>Rituais, indicadores e as duas ou três pessoas que puxam o resto.</p></div>
-    </div></div>${FOOT}</section>`);
+  // 05 Método
+  S.push(slide('', `
+    ${title('O método', 'Três perguntas que a sua empresa vai responder')}
+    <div class="sl-main"><div class="esl3">
+      <div class="col frag"><div class="L">E</div><div class="t">Esteira: <em>o que</em> você vende</div><p>Do serviço avulso ao protocolo com três níveis de preço. Produto certo vende com metade do esforço.</p></div>
+      <div class="col frag"><div class="L">S</div><div class="t">Sistema: <em>como</em> você vende</div><p>Scripts de prospecção, atendimento e reunião 1x1, escritos, testados e entregues ao time.</p></div>
+      <div class="col frag"><div class="L">L</div><div class="t">Liderança: <em>quem</em> vende quando você não está</div><p>Rituais, indicadores e as duas ou três pessoas que puxam o resto.</p></div>
+    </div></div>`));
 
   // 06 Linha do tempo
   const fases = meses === 12 ? [
@@ -355,172 +384,205 @@
     { k: 'Meses 2 a 3', t: 'Sistema de vendas', p: 'Scripts de prospecção, atendimento e reunião 1x1 em uso.' },
     { k: 'Mês 4 (bônus)', t: 'Time e consolidação', p: 'Tutoria com o time e ajustes finais nos hot seats.' },
   ];
-  S.push(`<section class="slide">${head}
-    <div><div class="sl-title"><div class="eyebrow">Como é o ano${meses === 4 ? ' (4 meses)' : ''}</div><h2>A ordem importa: primeiro o que, depois o como, depois o quem.</h2></div>
-    <div class="timeline"><div class="bar"></div><div class="phases">
-      ${fases.map(f => `<div class="ph a"><div class="k">${f.k}</div><div class="t">${f.t}</div><p>${f.p}</p></div>`).join('')}
-    </div></div></div>${FOOT}</section>`);
+  S.push(slide('', `
+    ${title(`Como é o ano${meses === 4 ? ' (4 meses)' : ''}`, 'A ordem importa: primeiro o que, depois o como, depois o quem.')}
+    <div class="sl-main"><div class="timeline"><div class="bar"></div><div class="phases">
+      ${fases.map(f => `<div class="ph frag"><div class="k">${f.k}</div><div class="t">${f.t}</div><p>${f.p}</p></div>`).join('')}
+    </div></div></div>`));
 
   // 07 Caso
-  S.push(`<section class="slide"><div class="case">${head}
-    <div>
-      <div class="eyebrow a">Um caso para tangibilizar</div>
-      <h2 class="a" style="font-size:2.9rem;margin-top:12px;max-width:16ch">${negocio ? `Uma ${esc(negocio)}` : 'Um consultório'} que fatura R$ 80 mil e não vende.</h2>
+  S.push(slide('', `<div class="case">
+    <div class="txt">
+      <div class="eyebrow" ${auto(0)}>Um caso para tangibilizar</div>
+      <h2 ${auto(1)}>${negocio ? `Uma ${esc(negocio)}` : 'Um consultório'} que fatura R$ 80 mil e não vende.</h2>
       <ul>
-        <li class="a">Pede indicação a cada paciente que teve resultado: três nomes por vez.</li>
-        <li class="a">Aborda quem já segue o perfil, com script, 15 por dia.</li>
-        <li class="a">Troca a consulta avulsa por um protocolo de 3, 6 e 12 meses.</li>
-        <li class="a">Reunião 1x1 com roteiro: diagnóstico, oferta, preço, fechamento.</li>
+        <li class="frag">Pede indicação a cada paciente que teve resultado: três nomes por vez.</li>
+        <li class="frag">Aborda quem já segue o perfil, com script, 15 por dia.</li>
+        <li class="frag">Troca a consulta avulsa por um protocolo de 3, 6 e 12 meses.</li>
+        <li class="frag">Reunião 1x1 com roteiro: diagnóstico, oferta, preço, fechamento.</li>
       </ul>
-      <p class="muted small a" style="margin-top:22px">Exemplo ilustrativo de mecânica, não promessa. O número depende de execução.</p>
+      <p class="muted small" ${auto(2)} style="margin-top:calc(1.4*var(--u))">Exemplo ilustrativo de mecânica, não promessa. O número depende de execução.</p>
     </div>
     <div class="bars">
-      <div class="bar-col"><div class="b" style="height:52%"><div class="n">R$ 80 mil</div><div class="l">por mês</div></div><div class="cap">Hoje</div></div>
-      <div class="bar-col hi"><div class="b" style="height:92%"><div class="n">R$ 130–150 mil</div><div class="l">por mês</div></div><div class="cap">Com processo rodando</div></div>
-    </div></div>${FOOT}</section>`);
+      <div class="bar-col" ${auto(3)}><div class="b" style="height:52%"><div class="n">R$ 80 mil</div><div class="l">por mês</div></div><div class="cap">Hoje</div></div>
+      <div class="bar-col hi frag"><div class="b" style="height:92%"><div class="n">R$ 130–150 mil</div><div class="l">por mês</div></div><div class="cap">Com processo rodando</div></div>
+    </div></div>`));
 
-  // 08+ Blocos com acúmulo
+  // 08–10(11) Blocos: um slide por bloco, um card por etapa
   const blocos = [
     { eyebrow: 'Bloco 1 · Encontros', title: 'Quanto de mim entra na sua empresa', items: deck.encontros, cols: 4 },
     { eyebrow: 'Bloco 2 · Sistema de vendas', title: 'O processo, escrito e entregue ao time', items: COMMON.processo, cols: 4 },
     { eyebrow: 'Bloco 3 · Conversão', title: 'Do primeiro "oi" ao contrato assinado', items: COMMON.conversao, cols: 3 },
   ];
   if (deck.exclusivos.length) blocos.push({ eyebrow: 'Bloco 4 · Exclusivo Premium', title: 'Tecnologia e tração nos primeiros 90 dias', items: deck.exclusivos, cols: 2 });
-  blocos.forEach(b => {
-    for (let n = 1; n <= b.items.length; n++) {
-      const shown = b.items.slice(0, n);
-      S.push(`<section class="slide">${head}
-        <div><div class="sl-title"><span class="eyebrow">${b.eyebrow}</span><h2>${b.title}</h2></div>
-        <div class="cards" style="--cols:${b.cols}">${shown.map((it, i) => card(it, i, i === n - 1, false)).join('')}</div></div>${FOOT}</section>`);
-    }
-  });
+  blocos.forEach(b => S.push(slide('', `
+    ${title(b.eyebrow, b.title)}
+    <div class="sl-main"><div class="cards" style="--cols:${b.cols}">${b.items.map((it, i) => card(it, i, { frag: true })).join('')}</div></div>`)));
 
   // Tudo junto
   const all = entregaveis(deck);
   const totalEnt = soma(all);
-  S.push(`<section class="slide stackall">${head}
-    <div><div class="sl-title" style="margin-bottom:24px"><span class="eyebrow">Tudo junto</span><h2>${all.length} entregáveis, com o valor de cada um</h2></div>
-    <div class="cards">${all.map((it, i) => card(it, i, false, true)).join('')}</div>
-    <div class="total-line"><span class="l">Valor somado dos entregáveis</span><span class="n">${brl(totalEnt)}</span></div></div>${FOOT}</section>`);
+  S.push(slide('stackall', `
+    ${title('Tudo junto', `${all.length} entregáveis, com o valor de cada um`)}
+    <div class="sl-main"><div class="cards">${all.map((it, i) => card(it, i, { withV: true })).join('')}</div></div>
+    <div class="total-line frag"><span class="l">Valor somado dos entregáveis</span><span class="n">${brl(totalEnt)}</span></div>`));
 
   // Preço
   const p = deck.preco;
-  const priceSlide = (final) => `<section class="slide"><div class="price-slide">${head}
-    <div><span class="eyebrow a">Investimento · ${esc(deck.curto)}</span><div class="giant a" style="margin-top:22px"><small>R$</small>${p.cartao.toLocaleString('pt-BR')}</div>
-    <p class="lead a" style="margin-top:18px">${final ? 'Três formas de entrar. A conta de cada uma está ao lado.' : 'No cartão de crédito, ou à vista.'}</p></div>
+  const priceSlide = (final) => slide('', `<div class="price">
+    <div><span class="eyebrow" ${auto(0)}>Investimento · ${esc(deck.curto)}</span><div class="giant" ${auto(1)} style="--i:1;margin-top:calc(1.4*var(--u))"><small>R$</small>${p.cartao.toLocaleString('pt-BR')}</div>
+    <p class="lead" ${auto(2)} style="margin-top:calc(1.1*var(--u))">${final ? 'Três formas de entrar. A conta de cada uma está ao lado.' : 'No cartão de crédito, ou à vista.'}</p></div>
     <div class="opts">
-      <div class="opt a"><div><div class="k">Opção 1</div><div class="n">${p.parcelas}x ${brl(p.parcela)}</div></div><div class="s">${brl(p.cartao)} parcelado no cartão de crédito</div></div>
-      ${final ? `<div class="opt a"><div><div class="k">Opção 2</div><div class="n">${brl(p.entrada)}</div></div><div class="s">de entrada + ${p.restante}x de ${brl(p.parcelaRestante)} no cartão</div></div>` : ''}
-      <div class="opt best a"><div><div class="k">${final ? 'Opção 3' : 'Opção 2'}</div><div class="n">${brl(p.avista)}</div></div><div class="s">à vista · ${Math.round((1 - p.avista / p.cartao) * 100)}% a menos</div></div>
-    </div></div>${FOOT}</section>`;
+      <div class="opt frag"><div><div class="k">Opção 1</div><div class="n">${p.parcelas}x ${brl(p.parcela)}</div></div><div class="s">${brl(p.cartao)} parcelado no cartão de crédito</div></div>
+      ${final ? `<div class="opt frag"><div><div class="k">Opção 2</div><div class="n">${brl(p.entrada)}</div></div><div class="s">de entrada + ${p.restante}x de ${brl(p.parcelaRestante)} no cartão</div></div>` : ''}
+      <div class="opt best frag"><div><div class="k">${final ? 'Opção 3' : 'Opção 2'}</div><div class="n">${brl(p.avista)}</div></div><div class="s">à vista · ${Math.round((1 - p.avista / p.cartao) * 100)}% a menos</div></div>
+    </div></div>`);
   S.push(priceSlide(false));
 
   // Bônus
-  S.push(`<section class="slide bonus-title">${head}<div><span class="eyebrow no-rule a">E ainda</span><div class="giant a">Bônus</div><p class="lead a" style="margin:16px auto 0">Quatro coisas que não estão no preço, mas estão no programa.</p></div>${FOOT}</section>`);
-  for (let n = 1; n <= deck.bonus.length; n++) {
-    const shown = deck.bonus.slice(0, n);
-    S.push(`<section class="slide">${head}
-      <div><div class="sl-title"><span class="eyebrow">Bônus</span><h2>Incluídos sem custo</h2></div>
-      <div class="cards" style="--cols:4">${shown.map((it, i) => card(it, i, i === n - 1, true)).join('')}</div></div>${FOOT}</section>`);
-  }
   const totalBonus = soma(deck.bonus);
+  S.push(slide('', `
+    ${title('E ainda', 'Quatro coisas que não estão no preço, mas estão no programa.')}
+    <div class="sl-main"><div class="cards" style="--cols:4">${deck.bonus.map((it, i) => card(it, i, { frag: true, withV: true })).join('')}</div></div>
+    <div class="total-line frag"><span class="l">Somando os bônus</span><span class="n">${brl(totalBonus)}</span></div>`));
 
-  // Recap + soma
-  S.push(`<section class="slide stackall">${head}
-    <div><div class="sl-title" style="margin-bottom:24px"><span class="eyebrow">Recapitulando</span><h2>Tudo o que chega</h2></div>
-    <div class="cards">${[...all, ...deck.bonus].map((it, i) => card(it, i, i >= all.length, true)).join('')}</div></div>${FOOT}</section>`);
-  S.push(`<section class="slide">${head}
-    <div style="text-align:center"><span class="eyebrow no-rule">A conta</span>
+  // Recapitulando
+  S.push(slide('stackall', `
+    ${title('Recapitulando', 'Tudo o que chega')}
+    <div class="sl-main"><div class="cards">${[...all, ...deck.bonus].map((it, i) => card(it, i, { withV: true, hi: i >= all.length })).join('')}</div></div>`));
+
+  // A conta
+  S.push(slide('conta', `
+    <span class="eyebrow no-rule" ${auto(0)}>A conta</span>
     <div class="sum">
-      <div class="a"><div class="n">${brl(totalEnt)}</div><div class="l">Entregáveis</div></div><div class="op a">+</div>
-      <div class="a"><div class="n">${brl(totalBonus)}</div><div class="l">Bônus</div></div><div class="op a">=</div>
-      <div class="res a"><div class="n">${brl(totalEnt + totalBonus)}</div><div class="l">Valor somado</div></div>
+      <div class="frag"><div class="n">${brl(totalEnt)}</div><div class="l">Entregáveis</div></div><div class="op frag">+</div>
+      <div class="frag"><div class="n">${brl(totalBonus)}</div><div class="l">Bônus</div></div><div class="op frag">=</div>
+      <div class="res frag"><div class="n">${brl(totalEnt + totalBonus)}</div><div class="l">Valor somado</div></div>
     </div>
-    <div class="total-line" style="justify-content:center;gap:40px;margin-top:50px"><span class="n strike">${brl(totalEnt + totalBonus)}</span><span class="n">${brl(p.cartao)}</span></div>
-    <p class="muted" style="margin-top:14px">${esc(deck.nome)} · ${esc(deck.duracao)}</p></div>${FOOT}</section>`);
+    <div class="total-line frag" style="justify-content:center;gap:calc(2.5*var(--u));margin-top:calc(3*var(--u))"><span class="n strike">${brl(totalEnt + totalBonus)}</span><span class="n">${brl(p.cartao)}</span></div>
+    <p class="muted frag" style="margin-top:calc(0.9*var(--u))">${esc(deck.nome)} · ${esc(deck.duracao)}</p>`));
 
   // Comparação
-  S.push(`<section class="slide">${head}
-    <div><div class="sl-title"><div class="eyebrow">A conta que eu faço com todo mundo</div><h2>${brl(p.parcela)} por mês compra duas coisas diferentes.</h2></div>
-    <div class="vs">
-      <div class="side a"><div class="k">Um funcionário a mais</div><div class="n">${brl(p.parcela)}<span style="font-size:1.2rem">/mês</span></div><p>Chega, não encontra processo, e passa seis meses descobrindo sozinho o que vender e como. Quase nunca muda o termômetro da empresa.</p></div>
-      <div class="mid a">ou</div>
-      <div class="side good a"><div class="k">${esc(deck.curto)}</div><div class="n">${brl(p.parcela)}<span style="font-size:1.2rem">/mês</span></div><p>Processo montado com o time que você já tem, ${meses} meses de acompanhamento, e quando o próximo funcionário chegar, ele chega para operar, não para inventar.</p></div>
+  S.push(slide('', `
+    ${title('A conta que eu faço com todo mundo', `${brl(p.parcela)} por mês compra duas coisas diferentes.`)}
+    <div class="sl-main"><div class="vs">
+      <div class="side frag"><div class="k">Um funcionário a mais</div><div class="n">${brl(p.parcela)}<span>/mês</span></div><p>Chega, não encontra processo, e passa seis meses descobrindo sozinho o que vender e como. Quase nunca muda o termômetro da empresa.</p></div>
+      <div class="mid" ${auto(0)}>ou</div>
+      <div class="side good frag"><div class="k">${esc(deck.curto)}</div><div class="n">${brl(p.parcela)}<span>/mês</span></div><p>Processo montado com o time que você já tem, ${meses} meses de acompanhamento, e quando o próximo funcionário chegar, ele chega para operar, não para inventar.</p></div>
     </div>
-    <p class="muted small" style="margin-top:30px">Referência de mercado: o clube anual de uma escola de negócios conhecida custa na casa de R$ 350 mil, sem encontro individual.</p></div>${FOOT}</section>`);
+    <p class="muted small" ${auto(1)} style="margin-top:calc(1.9*var(--u))">Referência de mercado: o clube anual de uma escola de negócios conhecida custa na casa de R$ 350 mil, sem encontro individual.</p></div>`));
 
-  // Posicionamento de vida (foto)
-  S.push(`<section class="slide"><div class="photo-wide">${head}
+  // Agenda / família
+  S.push(slide('', `<div class="photo-wide">
     ${photo('familia', 'Foto com a família · a inserir', 'natural')}
     <div>
-      <div class="eyebrow a">O que não entra na conta</div>
-      <h2 class="a" style="margin-top:14px">A agenda que eu ensino é <em class="gold">a que eu uso.</em></h2>
-      <p class="lead a" style="margin-top:18px">Dezessete anos com a mesma mulher, um filho que eu levo na escola, e uma empresa com o time em outro país. Processo não é para trabalhar mais. É para o dono voltar a escolher onde está às seis da tarde.</p>
-    </div></div>${FOOT}</section>`);
+      <div class="eyebrow" ${auto(0)}>O que não entra na conta</div>
+      <h2 ${auto(1)}>A agenda que eu ensino é <em class="gold">a que eu uso.</em></h2>
+      <p class="lead" ${auto(2)} style="margin-top:calc(1.1*var(--u))">Dezessete anos com a mesma mulher, um filho que eu levo na escola, e uma empresa com o time em outro país. Processo não é para trabalhar mais. É para o dono voltar a escolher onde está às seis da tarde.</p>
+    </div></div>`));
 
   // Para quem é
-  S.push(`<section class="slide paper">${head}
-    <div><div class="sl-title"><div class="eyebrow">Para quem é</div><h2>Funciona bem para três tipos de empresa. E mal para dois.</h2></div>
-    <div class="who">
+  S.push(slide('paper', `
+    ${title('Para quem é', 'Funciona bem para três tipos de empresa. E mal para dois.')}
+    <div class="sl-main"><div class="who">
       <div class="yes"><h3>Faz sentido</h3><ul>
-        <li class="a">Clínica, consultório ou escritório que já fatura e depende do dono para vender</li>
-        <li class="a">Empresa de treinamento, mentoria ou educação que precisa de prospecção e time</li>
-        <li class="a">Franquia ou serviço com time comercial de 2 a 20 pessoas, sem processo e sem indicador</li>
+        <li class="frag">Clínica, consultório ou escritório que já fatura e depende do dono para vender</li>
+        <li class="frag">Empresa de treinamento, mentoria ou educação que precisa de prospecção e time</li>
+        <li class="frag">Franquia ou serviço com time comercial de 2 a 20 pessoas, sem processo e sem indicador</li>
       </ul></div>
       <div class="no"><h3>Não faz</h3><ul>
-        <li class="a">Quem quer que eu venda no lugar do time: mentoria não é terceirização</li>
-        <li class="a">Quem não tem duas horas por semana para implementar</li>
+        <li class="frag">Quem quer que eu venda no lugar do time: mentoria não é terceirização</li>
+        <li class="frag">Quem não tem duas horas por semana para implementar</li>
       </ul></div>
-    </div></div>${FOOT}</section>`);
+    </div></div>`));
 
   // Preço final
   S.push(priceSlide(true));
 
   // Fechamento
-  S.push(`<section class="slide closing">${head}
-    <div><span class="eyebrow no-rule a">O próximo passo</span>
-    <h2 class="a">Onde passa um boi, <em class="gold">passa uma boiada.</em></h2>
+  S.push(slide('closing', `
+    <span class="eyebrow no-rule" ${auto(0)}>O próximo passo</span>
+    <h2 ${auto(1)}>Onde passa um boi, <em class="gold">passa uma boiada.</em></h2>
     <div class="steps">
-      <div class="step a"><b>01</b><div class="t">Decisão hoje</div><p class="muted small">Formato e forma de pagamento escolhidos nesta reunião.</p></div>
-      <div class="step a"><b>02</b><div class="t">Onboarding em 48h</div><p class="muted small">Agenda dos hot seats, acesso ao grupo e diagnóstico da esteira.</p></div>
-      <div class="step a"><b>03</b><div class="t">Primeiro encontro individual</div><p class="muted small">Esteira de produtos e os indicadores que o dono vai olhar toda semana.</p></div>
-    </div></div>${FOOT}</section>`);
+      <div class="step frag"><b>01</b><div class="t">Decisão hoje</div><p class="muted small">Formato e forma de pagamento escolhidos nesta reunião.</p></div>
+      <div class="step frag"><b>02</b><div class="t">Onboarding em 48h</div><p class="muted small">Agenda dos hot seats, acesso ao grupo e diagnóstico da esteira.</p></div>
+      <div class="step frag"><b>03</b><div class="t">Primeiro encontro individual</div><p class="muted small">Esteira de produtos e os indicadores que o dono vai olhar toda semana.</p></div>
+    </div>`));
 
-  // ---- Render / navegação ----
+  // ============================================================
+  // Render e navegação (slide, etapa)
+  // ============================================================
   const stage = document.getElementById('stage');
-  const total = S.length;
-  stage.innerHTML = S.map((html, i) => html.replace(FOOT, `<div class="sl-foot"><span>@venturahenrique</span><span><span class="pg">${String(i + 1).padStart(2, '0')}</span> / ${total}</span></div>`)).join('');
-  const els = [...stage.querySelectorAll('.slide')];
-  let cur = Math.min(Math.max(parseInt(location.hash.slice(1)) || 1, 1), els.length) - 1;
-  function show(i) {
-    cur = Math.min(Math.max(i, 0), els.length - 1);
-    els.forEach((s, k) => { s.classList.toggle('active', k === cur); s.classList.toggle('prev', k < cur); });
-    els[cur].querySelectorAll('.a, .dcard, .bar-col .b').forEach(c => { c.style.animation = 'none'; void c.offsetWidth; c.style.animation = ''; });
-    document.getElementById('counter').textContent = `${cur + 1} / ${els.length}`;
-    document.getElementById('progress').style.width = ((cur + 1) / els.length * 100) + '%';
-    history.replaceState(null, '', location.pathname + location.search + '#' + (cur + 1));
-  }
-  function fit() { stage.style.transform = `scale(${Math.min(window.innerWidth / 1600, window.innerHeight / 900)})`; }
-  window.addEventListener('resize', fit); fit(); show(cur);
-  window.addEventListener('hashchange', () => { const n = parseInt(location.hash.slice(1)); if (n && n - 1 !== cur) show(n - 1); });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(cur + 1); }
-    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
-    else if (e.key === 'Home') show(0);
-    else if (e.key === 'End') show(els.length - 1);
-    else if (e.key.toLowerCase() === 'f') toggleFull();
-    else if (e.key === '?') document.getElementById('help').classList.toggle('show');
-    else if (e.key === 'Escape') document.getElementById('help').classList.remove('show');
+  stage.innerHTML = S.join('');
+  const slides = [...stage.querySelectorAll('.slide')];
+  const frags = slides.map(s => [...s.querySelectorAll('.frag')]);
+  slides.forEach((s, i) => {
+    s.querySelector('.pg').innerHTML = `<b>${String(i + 1).padStart(2, '0')}</b> / ${slides.length}`;
+    s.querySelector('.dots').innerHTML = frags[i].map(() => '<i></i>').join('');
   });
-  document.getElementById('viewport').addEventListener('click', (e) => { if (e.target.closest('#hud')) return; show(e.clientX > window.innerWidth / 2 ? cur + 1 : cur - 1); });
-  let tx = null;
-  document.addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
-  document.addEventListener('touchend', e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) show(dx < 0 ? cur + 1 : cur - 1); tx = null; });
+  const progress = document.getElementById('progress');
+  const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
+  let cur = -1, step = 0, leaveTimer = 0;
+
+  function render({ anim = true, mark = false } = {}) {
+    slides.forEach((s, i) => {
+      if (i === cur) { s.classList.add('active'); s.classList.remove('leaving'); }
+      else if (s.classList.contains('active')) {
+        s.classList.replace('active', 'leaving');
+        clearTimeout(leaveTimer);
+        leaveTimer = setTimeout(() => { s.classList.remove('leaving'); s.classList.remove('noauto'); }, 700);
+      } else if (!s.classList.contains('leaving')) s.classList.remove('noauto');
+    });
+    const S = slides[cur];
+    if (!anim) { S.classList.add('instant', 'noauto'); }
+    frags[cur].forEach((f, k) => { f.classList.toggle('on', k < step); f.classList.toggle('cur', mark && k === step - 1); });
+    S.querySelectorAll('.dots i').forEach((d, k) => d.classList.toggle('on', k < step));
+    const n = frags[cur].length;
+    progress.style.width = ((cur + (n ? step / n : 1)) / slides.length * 100) + '%';
+    const h = '#' + (cur + 1) + (step ? '.' + step : '');
+    if (location.hash !== h) history.replaceState(null, '', location.pathname + location.search + h);
+    if (!anim) requestAnimationFrame(() => requestAnimationFrame(() => S.classList.remove('instant')));
+  }
+  function go(s, k, opts) { cur = clamp(s, 0, slides.length - 1); step = clamp(k, 0, frags[cur].length); render(opts); }
+  function next() { if (step < frags[cur].length) go(cur, step + 1, { mark: true }); else if (cur < slides.length - 1) go(cur + 1, 0); }
+  function prev() { if (step > 0) go(cur, step - 1, { mark: false }); else if (cur > 0) go(cur - 1, frags[cur - 1].length, { anim: false }); }
+  function applyHash() {
+    const m = /^#(\d+)(?:\.(\d+))?$/.exec(location.hash);
+    const s = m ? +m[1] - 1 : 0, k = m ? +(m[2] || 0) : 0;
+    if (s !== cur || k !== step) go(s, k, { anim: cur === -1 ? true : false });
+  }
   function toggleFull() { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
-  document.getElementById('b-prev').onclick = () => show(cur - 1);
-  document.getElementById('b-next').onclick = () => show(cur + 1);
-  document.getElementById('b-full').onclick = toggleFull;
-  document.getElementById('b-help').onclick = () => document.getElementById('help').classList.toggle('show');
+  const help = document.getElementById('help');
+  const act = { prev, next, full: toggleFull, help: () => help.classList.toggle('show') };
+
+  document.addEventListener('keydown', (e) => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === ' ' || k === 'PageDown') { e.preventDefault(); e.shiftKey ? go(cur + 1, 0) : next(); }
+    else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); e.shiftKey ? go(cur - 1, frags[Math.max(cur - 1, 0)].length, { anim: false }) : prev(); }
+    else if (k === 'ArrowDown') { e.preventDefault(); go(cur, frags[cur].length, { mark: false }); }
+    else if (k === 'ArrowUp') { e.preventDefault(); go(cur, 0); }
+    else if (k === 'Home') go(0, 0);
+    else if (k === 'End') go(slides.length - 1, frags[slides.length - 1].length, { anim: false });
+    else if (k.toLowerCase() === 'f') toggleFull();
+    else if (k === '?') help.classList.toggle('show');
+    else if (k === 'Escape') help.classList.remove('show');
+  });
+  let pd = null;
+  stage.addEventListener('pointerdown', (e) => { pd = { x: e.clientX, y: e.clientY, t: e.pointerType }; });
+  stage.addEventListener('pointerup', (e) => {
+    if (!pd) return;
+    const b = e.target.closest('[data-act]');
+    const dx = e.clientX - pd.x, dy = e.clientY - pd.y; const moved = Math.hypot(dx, dy);
+    if (b) act[b.dataset.act]();
+    else if (pd.t === 'touch' && Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) (dx < 0 ? next : prev)();
+    else if (moved < 8) (e.clientX > window.innerWidth / 2 ? next : prev)();
+    pd = null;
+  });
+  let hudTimer = 0;
+  const showHud = () => { document.body.classList.add('hud-on'); clearTimeout(hudTimer); hudTimer = setTimeout(() => document.body.classList.remove('hud-on'), 2000); };
+  document.addEventListener('mousemove', showHud); document.addEventListener('pointermove', showHud); document.addEventListener('pointerdown', showHud);
+  window.addEventListener('hashchange', applyHash);
+  applyHash();
 })();
 </script>
 </body>
