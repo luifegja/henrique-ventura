@@ -78,6 +78,75 @@ const DECKS = {
   },
 };
 
+// ------------------------------------------------------------
+// Decks personalizados por cliente (?plano=<id>). Não aparecem no seletor.
+// Repo público: nada de faturamento, saúde ou dado pessoal do cliente aqui.
+// ------------------------------------------------------------
+DECKS.patricia = {
+  ...DECKS.avancada,
+  id: 'patricia',
+  nome: 'Mentoria Avançada + Tecnologia',
+  curto: 'Avançada + Tecnologia',
+  tagline: 'Sair da obra e vender educação em escala, sem tudo depender de você.',
+  exclusivos: [
+    { t: 'CRM comercial com WhatsApp e cadência por produto', v: 40000, d: 'Todo lead do Mestre, do curso de Vendas Técnicas e do de Gestão no mesmo funil, com follow-up que não depende de memória.' },
+    { t: 'Reativação da base de ex-alunos do Mestre', v: 10000, d: 'Ligação em formato de pesquisa, retorno em 3 a 4 dias com a solução e oferta dos cursos novos para quem já confia em você.' },
+    { t: 'Automações do Instagram com isca por palavra-chave', v: 12000, d: 'O seguidor comenta, recebe o material e entra no funil: o que o ManyChat parado deveria estar fazendo.' },
+    { t: 'Agente de IA no pré-atendimento e na qualificação', v: 20000, d: 'Filtra quem chega pelo tráfego antes de ocupar a vendedora: separa o montador interessado do curioso.' },
+    { t: 'Simulador de vendas com os cenários do seu mercado', v: 8000, d: 'A vendedora treina com o lojista, o montador e o engenheiro simulados antes de falar com o cliente real.' },
+    { t: 'Painel do funil por produto', v: 7000, d: 'Custo por lead qualificado, conversão e receita de cada curso numa tela: decidir verba com número.' },
+  ],
+  preco: { cartao: 72000, parcelas: 12, parcela: 6000, entrada: 24000, restante: 10, parcelaRestante: 4800, avista: 60000 },
+  cliente: {
+    nome: 'Patrícia Andrade',
+    negocio: 'Mestre Steel Frame',
+    premissa: {
+      big: 'O curso que <em>mais gera margem</em> é justamente o que não consegue acontecer sem você na sala.',
+      after: 'Educação deixa muito mais dinheiro na mesa do que obra. A virada é fazer ela vender e rodar sem que cada turma dependa da sua agenda.',
+    },
+    espelho: [
+      'Tráfego pago já me trouxe mais curioso do que aluno.',
+      'Tenho as ferramentas, mas ninguém para fazer elas funcionarem.',
+      'O Mestre tem a minha cara. Se eu não vou, a turma não acontece.',
+      'O produto digital está pronto. Falta saber onde e como vender.',
+    ],
+    fases: [
+      { k: 'Mês 1', t: 'Desenho', p: 'Cliente ideal de cada curso, esteira e preços fechados, indicadores do funil.' },
+      { k: 'Meses 1 a 3', t: 'Caixa com a base', p: 'Reativação dos ex-alunos do Mestre, cadência no CRM e a vendedora treinada no simulador.' },
+      { k: 'Meses 2 a 5', t: 'Lançamento digital', p: 'Vendas Técnicas no ar, tráfego com filtro de qualificação, automações e agente de IA.' },
+      { k: 'Meses 5 a 12', t: 'Escala', p: 'Curso de Gestão, grupo de mentores parceiros, Mestre In Company com lojistas e a mentoria técnica.' },
+    ],
+    caso: {
+      titulo: 'O ativo mais subestimado do negócio: quem já fez o Mestre.',
+      passos: [
+        'Ligar para cada ex-aluno em formato de pesquisa: o que mudou, onde travou.',
+        'Voltar em 3 a 4 dias com a solução para o que ele mesmo contou.',
+        'Oferecer Vendas Técnicas e Gestão para quem já confia em você.',
+        'Transformar quem fecha em indicação para a próxima turma.',
+      ],
+      nota: 'Mecânica que usamos na rede de lojas Steel Home. A conversão depende de execução.',
+      antes: { n: 'Base parada', l: 'ex-alunos sem contato' },
+      depois: { n: '1 em cada 5', l: 'de volta, na estimativa do diagnóstico' },
+    },
+    porque: [
+      'Dois anos e meio por dentro do steel frame: franqueadora, lojas, curso para montador e turmas para os EUA.',
+      'O mesmo desafio que estruturamos lá: equilibrar o técnico e o comercial num curso que vende.',
+      'Tecnologia implantada junto, não indicada: CRM, automação e IA rodando dentro do seu negócio.',
+    ],
+  },
+  desc: {
+    'Implementação do processo de vendas': 'Do lead do Instagram à matrícula, desenhado para cada curso: Mestre presencial, Vendas Técnicas e Gestão.',
+    'Script de prospecção quente e fria': 'Para lojistas, construtoras e incorporadores que ainda não te conhecem, e para quem já te segue.',
+    'Script de indicação e geração de novos referidos': 'A indicação de montador para montador, que hoje acontece sozinha, vira rotina com dia, script e meta.',
+    'Indicadores personalizados de performance do time': 'Custo por lead qualificado, taxa de comparecimento e conversão de cada turma.',
+    'Plano de atendimento de alto padrão e alta conversão': 'O padrão que filtra o curioso e atende bem quem pode pagar, antes da vendedora gastar tempo.',
+    'Ajuste da esteira de produtos': 'Entrada, Vendas Técnicas, Gestão, Mestre, mentoria técnica e In Company: cada um com o seu preço e o seu público.',
+    'Script para a reunião 1x1 de vendas': 'O roteiro para a vendedora fechar turma e para você fechar consultoria e mentoria.',
+    'Tutoria mensal com o seu time de vendas, por 12 meses': 'Uma vez por mês com a sua vendedora e quem mais entrar no comercial.',
+    '2 encontros com mentor especialista e o seu time': 'Especialista convidado no tema que travar: tráfego, conteúdo ou gestão.',
+  },
+};
+
 // Entregáveis completos por deck (ordem de apresentação)
 function entregaveis(deck) {
   return [...deck.encontros, ...COMMON.processo, ...COMMON.conversao, ...deck.exclusivos];
@@ -87,8 +156,8 @@ function soma(items) { return items.reduce((a, b) => a + b.v, 0); }
 // Fotos (preencher com os caminhos quando as imagens estiverem em assets/img/)
 // Ex.: { capa: 'assets/img/henrique-retrato.jpg', palestra: 'assets/img/henrique-palestra.jpg' }
 const PHOTOS = {
-  // capa: 'assets/img/henrique-retrato.jpg',   // PENDENTE: retrato profissional (camisa azul, escritório) — pedir original ao Henrique
-  // palestra: 'assets/img/henrique-palestra.jpg',
+  capa: 'assets/img/henrique-retrato.jpg',       // 855BAEFC (ensaio, fundo cinza) — WhatsApp 22/10/2026
+  palestra: 'assets/img/henrique-palestra.jpg',  // IMG_0987, palestra evento Steel Home/PlacLux
   familia: 'assets/img/henrique-familia.jpg',
   casal: 'assets/img/henrique-casal-paris.jpg',
 };

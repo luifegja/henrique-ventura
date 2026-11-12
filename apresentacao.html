@@ -293,8 +293,10 @@
   const params = new URLSearchParams(location.search);
   const deck = DECKS[params.get('plano')];
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const nome = (params.get('nome') || '').trim();
-  const negocio = (params.get('negocio') || '').trim();
+  const C = deck && deck.cliente ? deck.cliente : null;  // deck personalizado de um cliente
+  const nome = (params.get('nome') || (C && C.nome) || '').trim();
+  const negocio = (params.get('negocio') || (C && C.negocio) || '').trim();
+  if (C) { const m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex, nofollow'; document.head.appendChild(m); }
 
   if (!deck) {
     document.getElementById('chooser').classList.add('show');
@@ -319,7 +321,7 @@
     <div class="dcard${frag ? ' frag' : ''}${hi ? ' cur' : ''}"${frag ? '' : ` ${auto(i)}`}>
       <span class="idx"><span>${String(i + 1).padStart(2, '0')}</span>${withV ? `<span class="pill">${brl(it.v)}</span>` : ''}</span>
       <div class="t">${esc(it.t)}</div>
-      ${it.d ? `<div class="d">${esc(it.d)}</div>` : '<span></span>'}
+      ${(deck.desc && deck.desc[it.t]) || it.d ? `<div class="d">${esc((deck.desc && deck.desc[it.t]) || it.d)}</div>` : '<span></span>'}
     </div>`;
   const S = [];
   const meses = deck.id === 'trimestral' ? 4 : 12;
@@ -336,19 +338,25 @@
     ${photo('capa', 'Henrique Ventura · @venturahenrique')}`));
 
   // 02 Premissa
-  S.push(slide('statement paper', `
+  S.push(slide('statement paper', C ? `
+    <div class="eyebrow" ${auto(0)}>O que eu ouvi na nossa conversa</div>
+    <p class="big" ${auto(1)}>${C.premissa.big}</p>
+    <p class="after frag">${esc(C.premissa.after)}</p>` : `
     <div class="eyebrow" ${auto(0)}>Antes de falar do programa</div>
     <p class="big" ${auto(1)}>Quatro lojas vendiam <em>R$ 8 milhões por ano</em> sem um CRM. E o dono fazia metade das vendas.</p>
     <p class="after frag">Eu vi isso por dentro, em 2024, mapeando empresas para virar franquia. Ninguém ali era preguiçoso. Faltava processo, e processo não se compra pronto.</p>`));
 
   // 03 Espelho
+  const espelho = C ? C.espelho : [
+    'Não tem gente boa no mercado.',
+    'Se eu passar meus clientes grandes para o time, eles levam embora.',
+    'Eu respondo cliente às onze da noite. Isso é dedicação.',
+    'Eu sei que preciso de processo. Só não sei quem monta sem parar a empresa.',
+  ];
   S.push(slide('paper', `
-    ${title(`O que eu ouço toda semana${nome ? ` · e talvez você, ${esc(nome)}` : ''}`, 'Frases de empresário bom demais na entrega para ter sobrado tempo de montar a venda.')}
+    ${title(C ? `Os quatro nós que você me trouxe, ${esc(nome.split(' ')[0])}` : `O que eu ouço toda semana${nome ? ` · e talvez você, ${esc(nome)}` : ''}`, C ? 'Nenhum deles é falta de conhecimento técnico. Todos são de venda e de estrutura.' : 'Frases de empresário bom demais na entrega para ter sobrado tempo de montar a venda.')}
     <div class="sl-main"><div class="mirror-grid">
-      <div class="m frag">Não tem gente boa no mercado.</div>
-      <div class="m frag">Se eu passar meus clientes grandes para o time, eles levam embora.</div>
-      <div class="m frag">Eu respondo cliente às onze da noite. Isso é dedicação.</div>
-      <div class="m frag">Eu sei que preciso de processo. Só não sei quem monta sem parar a empresa.</div>
+      ${espelho.map(f => `<div class="m frag">${esc(f)}</div>`).join('')}
     </div></div>`));
 
   // 04 Quem fala
@@ -375,7 +383,7 @@
     </div></div>`));
 
   // 06 Linha do tempo
-  const fases = meses === 12 ? [
+  const fases = C && C.fases ? C.fases : meses === 12 ? [
     { k: 'Meses 1 a 2', t: 'Diagnóstico e esteira', p: 'Oferta reformulada, protocolo high ticket e os indicadores que o dono olha toda semana.' },
     { k: 'Meses 2 a 6', t: 'Sistema de vendas', p: 'Prospecção ativa, indicação, plano de atendimento e script da reunião 1x1 rodando.' },
     { k: 'Meses 4 a 12', t: 'Time e liderança', p: 'Tutoria mensal com o time, rituais, correção de rota nos hot seats quinzenais.' },
@@ -391,7 +399,18 @@
     </div></div></div>`));
 
   // 07 Caso
-  S.push(slide('', `<div class="case">
+  if (C && C.caso) S.push(slide('', `<div class="case">
+    <div class="txt">
+      <div class="eyebrow" ${auto(0)}>Por onde começar</div>
+      <h2 ${auto(1)}>${esc(C.caso.titulo)}</h2>
+      <ul>${C.caso.passos.map(p => `<li class="frag">${esc(p)}</li>`).join('')}</ul>
+      <p class="muted small" ${auto(2)} style="margin-top:calc(1.4*var(--u))">${esc(C.caso.nota)}</p>
+    </div>
+    <div class="bars">
+      <div class="bar-col" ${auto(3)}><div class="b" style="height:40%"><div class="n">${esc(C.caso.antes.n)}</div><div class="l">${esc(C.caso.antes.l)}</div></div><div class="cap">Hoje</div></div>
+      <div class="bar-col hi frag"><div class="b" style="height:88%"><div class="n">${esc(C.caso.depois.n)}</div><div class="l">${esc(C.caso.depois.l)}</div></div><div class="cap">Nos primeiros 90 dias</div></div>
+    </div></div>`));
+  else S.push(slide('', `<div class="case">
     <div class="txt">
       <div class="eyebrow" ${auto(0)}>Um caso para tangibilizar</div>
       <h2 ${auto(1)}>${negocio ? `Uma ${esc(negocio)}` : 'Um consultório'} que fatura R$ 80 mil e não vende.</h2>
@@ -414,7 +433,9 @@
     { eyebrow: 'Bloco 2 · Sistema de vendas', title: 'O processo, escrito e entregue ao time', items: COMMON.processo, cols: 4 },
     { eyebrow: 'Bloco 3 · Conversão', title: 'Do primeiro "oi" ao contrato assinado', items: COMMON.conversao, cols: 3 },
   ];
-  if (deck.exclusivos.length) blocos.push({ eyebrow: 'Bloco 4 · Exclusivo Premium', title: 'Tecnologia e tração nos primeiros 90 dias', items: deck.exclusivos, cols: 2 });
+  if (deck.exclusivos.length) blocos.push(C
+    ? { eyebrow: 'Bloco 4 · Tecnologia e IA', title: 'As ferramentas rodando, sem depender de você', items: deck.exclusivos, cols: 3 }
+    : { eyebrow: 'Bloco 4 · Exclusivo Premium', title: 'Tecnologia e tração nos primeiros 90 dias', items: deck.exclusivos, cols: 2 });
   blocos.forEach(b => S.push(slide('', `
     ${title(b.eyebrow, b.title)}
     <div class="sl-main"><div class="cards" style="--cols:${b.cols}">${b.items.map((it, i) => card(it, i, { frag: true })).join('')}</div></div>`)));
@@ -481,8 +502,13 @@
       <p class="lead" ${auto(2)} style="margin-top:calc(1.1*var(--u))">Dezessete anos com a mesma mulher, um filho que eu levo na escola, e uma empresa com o time em outro país. Processo não é para trabalhar mais. É para o dono voltar a escolher onde está às seis da tarde.</p>
     </div></div>`));
 
-  // Para quem é
-  S.push(slide('paper', `
+  // Para quem é (no deck de cliente: por que eu, para você)
+  if (C && C.porque) S.push(slide('paper', `
+    ${title('Por que eu, para o seu negócio', 'Eu já estive do seu lado do balcão.')}
+    <div class="sl-main"><div class="esl3">
+      ${C.porque.map((t, i) => `<div class="col frag"><div class="L">${String(i + 1).padStart(2, '0')}</div><div class="t">${esc(t)}</div></div>`).join('')}
+    </div></div>`));
+  else S.push(slide('paper', `
     ${title('Para quem é', 'Funciona bem para três tipos de empresa. E mal para dois.')}
     <div class="sl-main"><div class="who">
       <div class="yes"><h3>Faz sentido</h3><ul>
