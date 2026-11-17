@@ -1,0 +1,14 @@
+Fotos de banco: Unsplash (licença Unsplash, uso gratuito, sem atribuição obrigatória).
+prospeccao.jpg: https://images.unsplash.com/photo-1537511446984-935f663eb1f4
+indicacao.jpg: https://images.unsplash.com/photo-1521791136064-7986c2920216
+indicadores.jpg: https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3
+atendimento.jpg: https://images.unsplash.com/photo-1576092783872-50eaba4d62bf
+esteira.jpg: https://images.unsplash.com/photo-1674620213535-9b2a2553ef40
+crm.jpg: https://images.unsplash.com/photo-1460925895917-afdab827c52f
+reativacao.jpg: https://images.unsplash.com/photo-1758611974917-f7f7a58b74b0
+instagram.jpg: https://images.unsplash.com/photo-1690883793939-f8cca2f28ee0
+simulador.jpg: https://images.unsplash.com/photo-1762328862557-e0a36587cd3c
+agente.jpg: https://images.unsplash.com/photo-1763810021881-49b45b0717d5
+painel.jpg: https://images.unsplash.com/photo-1526628953301-3e589a6a8b74
+Geradas por IA (Canva): hotseats.jpg, tutoria.jpg, individuais.jpg, especialista.jpg
+Fotos reais do Henrique (WhatsApp, whatsapp_mentoria/fotos/web): henrique-*.jpg

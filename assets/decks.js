@@ -164,4 +164,44 @@ const PHOTOS = {
   casal: 'assets/img/henrique-casal-paris.jpg',
 };
 
-window.ESL_DECKS = { DECKS, COMMON, entregaveis, soma, PHOTOS };
+// Imagem de cada entregável (assets/img/entregaveis/). A primeira regra que casar com o título vale.
+// Origem de cada arquivo em assets/img/entregaveis/CREDITOS.txt (fotos reais do Henrique, banco Unsplash e IA).
+const IMG_ENT = [
+  [/encontro extra/i, 'henrique-extra'],
+  [/hot seat/i, 'hotseats'],
+  [/tutoria mensal de ia/i, 'tutoria'],
+  [/tutoria mensal com o seu time/i, 'henrique-time'],
+  [/encontros? individua/i, 'henrique-individual'],
+  [/mentor especialista/i, 'especialista'],
+  [/encontro semanal/i, 'henrique-semanal'],
+  [/implementação do processo/i, 'henrique-workshop'],
+  [/prospecção/i, 'prospeccao'],
+  [/indicação/i, 'indicacao'],
+  [/indicadores/i, 'indicadores'],
+  [/atendimento/i, 'atendimento'],
+  [/esteira/i, 'esteira'],
+  [/reunião 1x1/i, 'individuais'],
+  [/crm/i, 'crm'],
+  [/reativação/i, 'reativacao'],
+  [/instagram/i, 'instagram'],
+  [/agente de ia/i, 'agente'],
+  [/simulador/i, 'simulador'],
+  [/painel/i, 'painel'],
+  [/comunicação para palestras/i, 'henrique-palco'],
+  [/palestras como funil/i, 'henrique-plateia'],
+];
+function imgDe(titulo) {
+  const r = IMG_ENT.find(([re]) => re.test(titulo));
+  return r ? `assets/img/entregaveis/${r[1]}.jpg` : null;
+}
+
+// Trajetória (slide "De onde eu venho"): fotos reais em assets/img/trajetoria/
+const TRAJETORIA = [
+  { k: '2013', t: 'Do call center ao palco', p: 'Saí do atendimento num banco e entrei no marketing de relacionamento sem saber vender.', img: 'assets/img/trajetoria/1-palco.jpg' },
+  { k: '9 anos · 5 países', t: '30 mil pessoas lideradas', p: 'Brasil, Equador, México, Peru e República Dominicana, com script e processo escritos.', img: 'assets/img/trajetoria/2-paises.jpg' },
+  { k: 'Plateias de até 20 mil', t: 'O tímido virou palestrante', p: 'O mesmo método, ensinado para salas cada vez maiores.', img: 'assets/img/trajetoria/3-arena.jpg' },
+  { k: '2023 a 2025', t: '22 lojas abertas', p: 'Diretor de expansão no steel frame: 30 contratos de franquia e um braço educacional com cerca de mil alunos.', img: 'assets/img/trajetoria/4-lojas.jpg' },
+  { k: 'Estados Unidos', t: 'Turmas de empresários lá fora', p: 'Duas turmas levadas para dez dias de imersão nas fábricas e lojas americanas.', img: 'assets/img/trajetoria/5-eua.jpg' },
+];
+
+window.ESL_DECKS = { DECKS, COMMON, entregaveis, soma, PHOTOS, imgDe, TRAJETORIA };
